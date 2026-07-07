@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>John's Hub — Interactive Alchemy Journey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Ambient layers shared across the whole experience -->
+  <div class="vignette"></div>
+  <canvas id="dust-canvas" aria-hidden="true"></canvas>
+
+  <!-- Progress / section indicator -->
+  <nav class="stage-indicator" aria-label="Journey progress">
+    <button class="dot" data-go="0" aria-label="The Laboratory"></button>
+    <button class="dot" data-go="1" aria-label="Preparation Phase"></button>
+    <button class="dot" data-go="2" aria-label="Alchemical Reaction"></button>
+    <button class="dot" data-go="3" aria-label="Transformation"></button>
+    <button class="dot" data-go="4" aria-label="The Gold"></button>
+    <button class="dot" data-go="5" aria-label="The Meaning"></button>
+  </nav>
+
+  <main id="stage">
+
+    <!-- ===================== SECTION 1 — THE LABORATORY ===================== -->
+    <section class="scene" id="scene-1" data-scene="0">
+      <div class="lab-environment">
+        <div class="stone-wall"></div>
+        <div class="shelf shelf-left">
+          <span class="book b1"></span><span class="book b2"></span><span class="book b3"></span>
+          <span class="book b4"></span><span class="book b5"></span>
+        </div>
+        <div class="shelf shelf-right">
+          <span class="jar"></span><span class="jar small"></span><span class="jar"></span>
+        </div>
+        <div class="alch-symbol s1">🜍</div>
+        <div class="alch-symbol s2">🜂</div>
+        <div class="alch-symbol s3">🜔</div>
+        <div class="alch-symbol s4">☿</div>
+        <div class="table"></div>
+        <div class="ambient-light"></div>
+      </div>
+
+      <header class="hub-title">
+        <h1 class="title-text" data-text="John's Hub">John's Hub</h1>
+        <p class="subtitle">An Interactive Alchemy Journey</p>
+      </header>
+
+      <!-- The flask on the heating platform -->
+      <div class="flask-rig" id="flask-rig-1">
+        <div class="stove">
+          <div class="stove-glow"></div>
+          <div class="stove-body"></div>
+          <div class="stove-leds"><i></i><i></i><i></i></div>
+        </div>
+        <svg class="flask" viewBox="0 0 200 280" aria-hidden="true">
+          <defs>
+            <linearGradient id="glassGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28"/>
+              <stop offset="45%" stop-color="#bfe9ff" stop-opacity="0.10"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0.20"/>
+            </linearGradient>
+            <radialGradient id="clayGrad" cx="38%" cy="32%" r="75%">
+              <stop offset="0%" stop-color="#f7f1e2"/>
+              <stop offset="55%" stop-color="#e3d6bd"/>
+              <stop offset="100%" stop-color="#b9a886"/>
+            </radialGradient>
+          </defs>
+          <!-- flask body -->
+          <path class="flask-glass" d="M82 18 h36 v74 l44 120 a48 48 0 0 1 -44 66 h-36 a48 48 0 0 1 -44 -66 l44 -120 z"/>
+          <!-- neck rim -->
+          <rect class="flask-rim" x="76" y="10" width="48" height="12" rx="4"/>
+          <!-- liquid placeholder (empty in scene 1) -->
+          <clipPath id="flaskClip">
+            <path d="M82 18 h36 v74 l44 120 a48 48 0 0 1 -44 66 h-36 a48 48 0 0 1 -44 -66 l44 -120 z"/>
+          </clipPath>
+          <!-- clay sphere -->
+          <g clip-path="url(#flaskClip)">
+            <circle class="clay-sphere" cx="100" cy="218" r="34" fill="url(#clayGrad)"/>
+            <ellipse class="clay-shine" cx="88" cy="204" rx="10" ry="6" fill="#fff" opacity="0.5"/>
+          </g>
+          <!-- glass highlight -->
+          <path class="flask-highlight" d="M70 60 q-18 60 6 120" />
+        </svg>
+
+        <!-- glowing red interaction point over the clay -->
+        <button class="hotspot" id="hotspot-clay" aria-label="Magnify the clay">
+          <span class="hot-ring"></span>
+          <span class="hot-core"></span>
+        </button>
+      </div>
+
+      <p class="hint hint-1">Hover the glowing point on the clay, then click to begin</p>
+    </section>
+
+    <!-- ===================== SECTION 2 — PREPARATION PHASE ===================== -->
+    <section class="scene" id="scene-2" data-scene="1">
+      <div class="zoom-vignette"></div>
+      <div class="flask-rig zoomed" id="flask-rig-2">
+        <svg class="flask big" viewBox="0 0 200 280" aria-hidden="true">
+          <path class="flask-glass" d="M82 18 h36 v74 l44 120 a48 48 0 0 1 -44 66 h-36 a48 48 0 0 1 -44 -66 l44 -120 z"/>
+          <rect class="flask-rim" x="76" y="10" width="48" height="12" rx="4"/>
+          <g clip-path="url(#flaskClip)">
+            <circle class="clay-sphere" cx="100" cy="218" r="32" fill="url(#clayGrad)"/>
+          </g>
+          <path class="flask-highlight" d="M70 60 q-18 60 6 120" />
+        </svg>
+
+        <button class="hotspot near-opening" id="hotspot-add" aria-label="Add materials">
+          <span class="hot-ring"></span>
+          <span class="hot-core"></span>
+        </button>
+      </div>
+
+      <!-- Material catalogue revealed on hover/click -->
+      <aside class="material-panel" id="material-panel">
+        <h2>Add to the Flask</h2>
+        <ul>
+          <li class="mat mat-gold">
+            <span class="mat-vial vial-green"></span>
+            <span class="mat-name">HAuCl<sub>4</sub></span>
+            <span class="mat-desc">Bright translucent green liquid</span>
+          </li>
+          <li class="mat mat-h2">
+            <span class="mat-vial vial-blue"></span>
+            <span class="mat-name">Liquid H<sub>2</sub></span>
+            <span class="mat-desc">Pale cryogenic blue, frosted mist</span>
+          </li>
+          <li class="mat mat-stone">
+            <span class="mat-vial vial-stone"></span>
+            <span class="mat-name">Philosopher's Stone</span>
+            <span class="mat-desc">Violet core, pink radiation aura</span>
+          </li>
+        </ul>
+        <button class="btn brass" id="btn-pour">Pour Materials In</button>
+      </aside>
+
+      <p class="hint hint-2">Click the glow near the flask opening</p>
+    </section>
+
+    <!-- ===================== SECTION 3 — REACTION SETUP ===================== -->
+    <section class="scene" id="scene-3" data-scene="2">
+      <div class="flask-rig zoomed" id="flask-rig-3">
+        <div class="stove platform">
+          <div class="stove-glow hot"></div>
+          <div class="stove-body"></div>
+        </div>
+        <svg class="flask big" viewBox="0 0 200 280" aria-hidden="true">
+          <path class="flask-glass" d="M82 18 h36 v74 l44 120 a48 48 0 0 1 -44 66 h-36 a48 48 0 0 1 -44 -66 l44 -120 z"/>
+          <rect class="flask-rim" x="76" y="10" width="48" height="12" rx="4"/>
+          <g clip-path="url(#flaskClip)">
+            <rect class="fluid fluid-green" x="38" y="280" width="124" height="0"/>
+            <rect class="fluid fluid-blue" x="38" y="280" width="124" height="0"/>
+            <circle class="clay-sphere" cx="100" cy="220" r="30" fill="url(#clayGrad)"/>
+            <g class="stone-floating" opacity="0">
+              <polygon class="stone-crystal" points="100,150 116,176 100,210 84,176" />
+            </g>
+            <g class="bubbles"></g>
+          </g>
+          <path class="flask-highlight" d="M70 60 q-18 60 6 120" />
+        </svg>
+
+        <!-- temperature meter -->
+        <div class="thermo" id="thermo">
+          <div class="thermo-fill"></div>
+          <span class="thermo-read">25°C</span>
+        </div>
+
+        <!-- heating button emerging from stove -->
+        <button class="btn heat-btn" id="btn-heat">
+          <span class="heat-led"></span>
+          HEAT TO 450°C
+        </button>
+      </div>
+      <p class="hint hint-3">Press the brass control to begin heating</p>
+    </section>
+
+    <!-- ===================== SECTION 4 — TRANSFORMATION ===================== -->
+    <section class="scene" id="scene-4" data-scene="3">
+      <div class="vortex" id="vortex">
+        <div class="vortex-ring r-green"></div>
+        <div class="vortex-ring r-purple"></div>
+        <div class="vortex-core"></div>
+      </div>
+
+      <article class="info-bubble" id="info-4">
+        <span class="info-kicker">Humanities Research</span>
+        <h2>The Mirage of the Middle East</h2>
+        <p>
+          A <strong>Concord Review</strong> research paper exploring the tension between
+          <em>perception and reality</em> — unraveling the hidden narratives and overlooked
+          perspectives that shape how a region is understood.
+        </p>
+        <ul class="tag-row">
+          <li>Humanities research</li>
+          <li>Scientific inquiry</li>
+          <li>Cultural exploration</li>
+          <li>Intellectual curiosity</li>
+        </ul>
+        <button class="btn brass" id="btn-final-product">See the Final Product</button>
+      </article>
+    </section>
+
+    <!-- ===================== SECTION 5 — THE GOLD ===================== -->
+    <section class="scene" id="scene-5" data-scene="4">
+      <div class="lab-environment dim">
+        <div class="stone-wall"></div>
+        <div class="table"></div>
+      </div>
+
+      <div class="debris">
+        <span class="shard sh1"></span><span class="shard sh2"></span>
+        <span class="shard sh3"></span><span class="shard sh4"></span>
+        <span class="residue"></span>
+      </div>
+
+      <div class="gold-stage" id="gold-stage">
+        <div class="lens-flare"></div>
+        <div class="shine-streaks"></div>
+        <svg class="gold-nugget" viewBox="0 0 220 160" aria-hidden="true">
+          <defs>
+            <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fff6cf"/>
+              <stop offset="35%" stop-color="#f5d35a"/>
+              <stop offset="65%" stop-color="#d4af37"/>
+              <stop offset="100%" stop-color="#8a6a16"/>
+            </linearGradient>
+          </defs>
+          <polygon fill="url(#goldGrad)" points="20,120 50,60 100,40 150,52 200,96 175,140 90,150 40,140"/>
+          <polygon fill="#fff7d6" opacity="0.6" points="50,60 100,40 110,78 70,90"/>
+          <polygon fill="#bf9a2e" opacity="0.7" points="150,52 200,96 175,140 130,110"/>
+        </svg>
+        <button class="gold-hotspot" id="hotspot-gold" aria-label="Discover the meaning of the gold"></button>
+      </div>
+
+      <p class="hint hint-5">A treasure forged from the reaction — click the gold</p>
+    </section>
+
+    <!-- ===================== SECTION 6 — THE MEANING ===================== -->
+    <section class="scene" id="scene-6" data-scene="5">
+      <article class="info-bubble wide" id="info-6">
+        <span class="info-kicker">The Meaning of the Gold</span>
+        <h2 class="gold-text">"The gold represents the discovery of my passion for chemistry."</h2>
+
+        <div class="meaning-grid">
+          <div class="meaning-card">
+            <h3>Pioneer Academics Research</h3>
+            <p>Blood chemistry research — scientific investigation paired with rigorous analytical thinking.</p>
+          </div>
+          <div class="meaning-card">
+            <h3>Identity Connection</h3>
+            <p>Chemistry ties together my curiosity, love of discovery, pattern recognition, and fascination with unseen processes.</p>
+          </div>
+        </div>
+
+        <button class="btn brass" id="btn-restart">Back to the Alchemy Experiment</button>
+      </article>
+    </section>
+
+  </main>
+
+  <!-- transition flash overlay -->
+  <div class="flash" id="flash"></div>
+  <div class="zoom-text" id="zoom-text">Magnifying on the clay…</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

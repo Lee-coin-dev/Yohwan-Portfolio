@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>John Kim — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@0;1&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============ HERO / ABOUT ME ============ -->
+  <header class="hero" id="hero">
+    <div class="hero-badge" aria-hidden="true">
+      <span>wavette<br />video&nbsp;/<br />media</span>
+    </div>
+
+    <div class="hero-text">
+      <p class="hero-kicker">portfolio</p>
+      <h1 class="hero-name">John Kim</h1>
+      <p class="hero-sub">
+        Rower &middot; Chemistry enthusiast &middot; Storyteller<br />
+        Scroll to row the 1500m with me.
+      </p>
+      <div class="hero-scroll-hint" aria-hidden="true">
+        <span class="hint-text">scroll</span>
+        <span class="hint-arrow">&#9660;</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ THE RACE ============ -->
+  <main class="race" id="race">
+
+    <!-- Starting dock -->
+    <div class="dock" id="dock">
+      <div class="dock-planks">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <p class="dock-label">starting dock</p>
+    </div>
+
+    <!-- Distance markers (left column) -->
+    <div class="markers" aria-hidden="true">
+      <div class="marker" style="top: 1%"><i></i>1500m</div>
+      <div class="marker" style="top: 20.5%"><i></i>1200m</div>
+      <div class="marker" style="top: 40%"><i></i>900m</div>
+      <div class="marker" style="top: 59.5%"><i></i>600m</div>
+      <div class="marker" style="top: 79%"><i></i>300m</div>
+      <div class="marker" style="top: 98%"><i></i>0m</div>
+    </div>
+
+    <!-- The stream -->
+    <svg class="stream" viewBox="0 0 720 5400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="waterGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="5400">
+          <stop offset="0"   stop-color="#16384d" />
+          <stop offset="0.4" stop-color="#1d3e50" />
+          <stop offset="0.7" stop-color="#3d3344" />
+          <stop offset="1"   stop-color="#5c1f28" />
+        </linearGradient>
+        <linearGradient id="bankGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="5400">
+          <stop offset="0" stop-color="#0e2433" />
+          <stop offset="1" stop-color="#3a1219" />
+        </linearGradient>
+        <pattern id="checks" width="36" height="36" patternUnits="userSpaceOnUse">
+          <rect width="36" height="36" fill="#f2ece2" />
+          <rect x="0" y="0" width="18" height="18" fill="#15110f" />
+          <rect x="18" y="18" width="18" height="18" fill="#15110f" />
+        </pattern>
+      </defs>
+
+      <!-- banks (wider stroke under the water) -->
+      <path class="bank" d="M 360 0
+        C 360 350, 240 650, 240 1080
+        S 480 1750, 480 2160
+        S 240 2850, 240 3240
+        S 470 3950, 460 4320
+        S 365 5100, 362 5400"
+        fill="none" stroke="url(#bankGrad)" stroke-width="258" stroke-linecap="round" />
+
+      <!-- water -->
+      <path id="riverPath" d="M 360 0
+        C 360 350, 240 650, 240 1080
+        S 480 1750, 480 2160
+        S 240 2850, 240 3240
+        S 470 3950, 460 4320
+        S 365 5100, 362 5400"
+        fill="none" stroke="url(#waterGrad)" stroke-width="230" stroke-linecap="round" />
+
+      <!-- subtle current line -->
+      <path class="current" d="M 360 0
+        C 360 350, 240 650, 240 1080
+        S 480 1750, 480 2160
+        S 240 2850, 240 3240
+        S 470 3950, 460 4320
+        S 365 5100, 362 5400"
+        fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="3" stroke-dasharray="14 26" />
+
+      <!-- lane-number wire (~450m to go) -->
+      <g id="laneWire">
+        <rect x="30"  y="3712" width="10" height="64" rx="3" fill="#241b18" />
+        <rect x="680" y="3712" width="10" height="64" rx="3" fill="#241b18" />
+        <path d="M 40 3744 Q 360 3786 680 3744" fill="none" stroke="#d8cdbf" stroke-width="4" />
+        <g class="flag" transform="translate(112, 3756)">
+          <polygon points="0,0 40,0 20,50" fill="#e8e2d5" stroke="#241b18" stroke-width="3" />
+          <text x="20" y="22" text-anchor="middle" class="flag-num">1</text>
+        </g>
+        <g class="flag" transform="translate(207, 3763)">
+          <polygon points="0,0 40,0 20,50" fill="#e8e2d5" stroke="#241b18" stroke-width="3" />
+          <text x="20" y="22" text-anchor="middle" class="flag-num">2</text>
+        </g>
+        <g class="flag" transform="translate(302, 3767)">
+          <polygon points="0,0 40,0 20,50" fill="#e8e2d5" stroke="#241b18" stroke-width="3" />
+          <text x="20" y="22" text-anchor="middle" class="flag-num">3</text>
+        </g>
+        <g class="flag" transform="translate(397, 3767)">
+          <polygon points="0,0 40,0 20,50" fill="#e8e2d5" stroke="#241b18" stroke-width="3" />
+          <text x="20" y="22" text-anchor="middle" class="flag-num">4</text>
+        </g>
+        <g class="flag" transform="translate(492, 3763)">
+          <polygon points="0,0 40,0 20,50" fill="#e8e2d5" stroke="#241b18" stroke-width="3" />
+          <text x="20" y="22" text-anchor="middle" class="flag-num">5</text>
+        </g>
+        <g class="flag" transform="translate(587, 3756)">
+          <polygon points="0,0 40,0 20,50" fill="#e8e2d5" stroke="#241b18" stroke-width="3" />
+          <text x="20" y="22" text-anchor="middle" class="flag-num">6</text>
+        </g>
+      </g>
+
+      <!-- finish line (0m) -->
+      <g id="finishLine">
+        <rect x="235" y="5288" width="256" height="44" fill="url(#checks)" stroke="#15110f" stroke-width="4" rx="4" />
+        <text x="363" y="5368" text-anchor="middle" class="finish-label">FINISH</text>
+      </g>
+    </svg>
+
+    <!-- The boat: an eight + coxswain, animated along the river path -->
+    <svg class="boat" id="boat" viewBox="0 0 360 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- port-side oars (top) -->
+      <g class="oar oar-port"><line x1="70"  y1="50" x2="70"  y2="12" /><rect x="64"  y="6" width="12" height="16" rx="4" /></g>
+      <g class="oar oar-star"><line x1="102" y1="70" x2="102" y2="108" /><rect x="96"  y="98" width="12" height="16" rx="4" /></g>
+      <g class="oar oar-port"><line x1="134" y1="50" x2="134" y2="12" /><rect x="128" y="6" width="12" height="16" rx="4" /></g>
+      <g class="oar oar-star"><line x1="166" y1="70" x2="166" y2="108" /><rect x="160" y="98" width="12" height="16" rx="4" /></g>
+      <g class="oar oar-port"><line x1="198" y1="50" x2="198" y2="12" /><rect x="192" y="6" width="12" height="16" rx="4" /></g>
+      <g class="oar oar-star"><line x1="230" y1="70" x2="230" y2="108" /><rect x="224" y="98" width="12" height="16" rx="4" /></g>
+      <g class="oar oar-port"><line x1="262" y1="50" x2="262" y2="12" /><rect x="256" y="6" width="12" height="16" rx="4" /></g>
+      <g class="oar oar-star"><line x1="294" y1="70" x2="294" y2="108" /><rect x="288" y="98" width="12" height="16" rx="4" /></g>
+
+      <!-- hull (bow points right / direction of travel) -->
+      <path class="hull" d="M 14 60 Q 30 47 90 47 L 300 47 Q 348 47 356 60 Q 348 73 300 73 L 90 73 Q 30 73 14 60 Z" />
+      <circle class="bow-ball" cx="354" cy="60" r="5" />
+
+      <!-- coxswain at the stern -->
+      <circle class="cox" cx="38" cy="60" r="7" />
+      <!-- rowers -->
+      <circle class="rower" cx="70"  cy="60" r="5.5" />
+      <circle class="rower" cx="102" cy="60" r="5.5" />
+      <circle class="rower" cx="134" cy="60" r="5.5" />
+      <circle class="rower" cx="166" cy="60" r="5.5" />
+      <circle class="rower" cx="198" cy="60" r="5.5" />
+      <circle class="rower" cx="230" cy="60" r="5.5" />
+      <circle class="rower" cx="262" cy="60" r="5.5" />
+      <circle class="rower" cx="294" cy="60" r="5.5" />
+    </svg>
+
+    <!-- Milestone bubbles -->
+    <section class="milestone" style="top: 20%" data-year="2023">
+      <h2>2023</h2>
+      <h3>First Strokes</h3>
+      <p>
+        Joined the novice crew team knowing nothing but the word "row."
+        Learned the catch, the drive, the finish &mdash; and that a boat only
+        moves when eight people commit to the exact same instant. My first
+        regatta: we finished last, and I was hooked anyway.
+      </p>
+    </section>
+
+    <section class="milestone" style="top: 40%" data-year="2024">
+      <h2>2024</h2>
+      <h3>Finding the Rhythm</h3>
+      <p>
+        Earned a seat in the varsity eight. Mornings on the water taught me
+        the same patience as my AP Chemistry labs: rate matters, timing
+        matters, and small inputs compound. Took silver at the city
+        championships and started filming &amp; editing our race recaps.
+      </p>
+    </section>
+
+    <section class="milestone" style="top: 60%" data-year="2025">
+      <h2>2025</h2>
+      <h3>Power Ten</h3>
+      <p>
+        Named stroke seat &mdash; the rower the whole boat follows. Led a
+        "power ten" through the regional final to a podium finish, and led a
+        student research project on exothermic reactions: how breaking and
+        forming bonds releases energy you can actually feel.
+      </p>
+    </section>
+
+    <section class="milestone" style="top: 80%" data-year="2026">
+      <h2>2026</h2>
+      <h3>The Sprint &mdash; Warmth</h3>
+      <p>
+        The last 300m of a race is pure chemistry: stored energy converted to
+        heat, lungs burning, the water around the hull almost glowing. That
+        <em>warmth</em> &mdash; exothermic, human, shared with eight teammates
+        &mdash; is what I want to bring with me to college.
+      </p>
+    </section>
+  </main>
+
+  <!-- ============ AFTER THE FINISH ============ -->
+  <footer class="finish-footer">
+    <p class="finish-kicker">race complete</p>
+    <h2>Thanks for rowing with me.</h2>
+    <p class="finish-copy">
+      John Kim &mdash; rower, chemist-in-training, and storyteller.<br />
+      Let's pull the next stroke together.
+    </p>
+    <a class="contact-btn" href="mailto:johnkim@example.com">Get in touch</a>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
