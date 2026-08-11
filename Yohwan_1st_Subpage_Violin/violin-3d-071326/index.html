@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>John Kim — String Pathway</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ═══ SECTION 1 — Violin Navigation Hub ═══ -->
+  <section id="section-hub" class="scene scene--active" data-scene="hub">
+    <header class="hub-header">
+      <span class="hub-header__name">John Kim</span>
+      <span class="hub-header__subtitle">String Pathway</span>
+    </header>
+
+    <div class="violin-stage">
+      <!-- 3D violin (Three.js loads assets/violin.glb into this container — see violin-3d.js) -->
+      <div id="violin-3d-container" class="violin-3d-container" aria-label="Interactive 3D violin"></div>
+
+      <!-- Floating labels -->
+      <div class="string-labels">
+        <button class="string-label string-label--g" data-string="g" style="--label-x:18%; --label-y:42%;">
+          <span class="string-label__dot"></span>G String
+        </button>
+        <button class="string-label string-label--d" data-string="d" style="--label-x:24%; --label-y:52%;">
+          <span class="string-label__dot"></span>D String
+        </button>
+        <button class="string-label string-label--a" data-string="a" style="--label-x:30%; --label-y:62%;">
+          <span class="string-label__dot"></span>A String
+        </button>
+      </div>
+    </div>
+
+    <p class="hub-hint">Select a string to begin your pathway</p>
+  </section>
+
+  <!-- ═══ SECTION 2 — Resonance Transition ═══ -->
+  <section id="section-resonance" class="scene scene--overlay" data-scene="resonance" aria-hidden="true">
+    <div class="resonance-overlay">
+      <div class="resonance-particles" id="resonance-particles"></div>
+      <div class="resonance-notes" id="resonance-notes"></div>
+      <h2 class="resonance-title">RESONANCE</h2>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION 3 — A String Pathway ═══ -->
+  <section id="section-a" class="scene" data-scene="a" aria-hidden="true">
+    <!-- 3A: Music Stand -->
+    <div class="a-scene a-scene--stand" id="a-stand">
+      <div class="stage-spotlight"></div>
+      <div class="music-stand-scene">
+        <div class="music-stand">
+          <div class="music-stand__shelf">
+            <div class="music-book" id="music-book-closed">
+              <div class="music-book__cover">
+                <span class="music-book__title">Compilation</span>
+                <span class="music-book__subtitle">Musical Journey</span>
+              </div>
+              <button class="btn-red" id="btn-open-book" aria-label="Open compilation book">●</button>
+            </div>
+            <div class="music-stand__tray" aria-hidden="true"></div>
+          </div>
+          <div class="music-stand__leg"></div>
+          <div class="music-stand__base"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3B: Interactive Book (hidden until user opens the compilation book) -->
+    <div class="a-scene a-scene--book" id="a-book" aria-hidden="true">
+      <div class="book-viewport">
+        <div class="book-pages" id="book-pages">
+          <article class="book-page book-page--active" data-year="2019">
+            <span class="book-page__year">2019</span>
+            <div class="book-page__image book-page__image--1"></div>
+            <h3>First Steps</h3>
+            <p>Joined the school orchestra. Learned that discipline and vulnerability can coexist in the same bow stroke.</p>
+            <ul class="book-page__milestones">
+              <li>First ensemble performance</li>
+              <li>Regional youth orchestra audition</li>
+            </ul>
+          </article>
+          <article class="book-page" data-year="2022">
+            <span class="book-page__year">2022</span>
+            <div class="book-page__image book-page__image--2"></div>
+            <h3>Finding Voice</h3>
+            <p>Chamber music changed how I listen — not to myself, but to the space between notes shared with others.</p>
+            <ul class="book-page__milestones">
+              <li>Chamber festival finalist</li>
+              <li>Started teaching younger students</li>
+            </ul>
+          </article>
+          <article class="book-page" data-year="2024">
+            <span class="book-page__year">2024</span>
+            <div class="book-page__image book-page__image--3"></div>
+            <h3>Breaking Through</h3>
+            <p>Solo repertoire demanded honesty. Every phrase became a question I had to answer in real time.</p>
+            <ul class="book-page__milestones">
+              <li>State competition — top 3</li>
+              <li>Commissioned contemporary work premiere</li>
+            </ul>
+          </article>
+          <article class="book-page" data-year="2026">
+            <span class="book-page__year">2026</span>
+            <div class="book-page__image book-page__image--4"></div>
+            <h3>Looking Forward</h3>
+            <p>Music and science converge in how I think about resonance — in halls, in labs, and in community.</p>
+            <ul class="book-page__milestones">
+              <li>Duke-bound — interdisciplinary path</li>
+              <li>Senior recital program curated</li>
+            </ul>
+          </article>
+        </div>
+        <div class="book-controls">
+          <button class="btn-red btn-red--large" id="btn-turn-page" aria-label="Turn page">Turn Page</button>
+          <button class="btn-return" id="btn-return-a" hidden>Return to Violin</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION 4 — D String Pathway ═══ -->
+  <section id="section-d" class="scene" data-scene="d" aria-hidden="true">
+    <div class="theater" id="theater">
+      <div class="theater__backdrop"></div>
+      <div class="curtain curtain--left" id="curtain-left"></div>
+      <div class="curtain curtain--right" id="curtain-right"></div>
+      <button class="curtain-prompt" id="curtain-prompt">Click to reveal the stage</button>
+
+      <div class="performance-stage" id="performance-stage" hidden>
+        <h2 class="performance-stage__title">Performance Timeline</h2>
+        <p class="performance-stage__subtitle">Growth in expression across the years</p>
+
+        <div class="performance-carousel">
+          <button class="carousel-btn carousel-btn--prev" id="carousel-prev" aria-label="Previous">‹</button>
+          <div class="carousel-track" id="carousel-track">
+            <article class="performance-slide performance-slide--active" data-year="2019">
+              <div class="performance-slide__video">
+                <div class="video-placeholder" data-label="2019 — School Recital"></div>
+              </div>
+              <h3>2019 — School Recital</h3>
+              <p>First solo performance. Nerves transformed into focus mid-phrase.</p>
+            </article>
+            <article class="performance-slide" data-year="2023">
+              <div class="performance-slide__video">
+                <div class="video-placeholder" data-label="2023 — Chamber Festival"></div>
+              </div>
+              <h3>2023 — Chamber Festival</h3>
+              <p>Collaborative expression — listening as actively as playing.</p>
+            </article>
+            <article class="performance-slide" data-year="2025">
+              <div class="performance-slide__video">
+                <div class="video-placeholder" data-label="2025 — Competition Finals"></div>
+              </div>
+              <h3>2025 — Competition Finals</h3>
+              <p>Peak technical demand met with emotional clarity.</p>
+            </article>
+            <article class="performance-slide" data-year="2026">
+              <div class="performance-slide__video">
+                <div class="video-placeholder" data-label="2026 — Senior Recital"></div>
+              </div>
+              <h3>2026 — Senior Recital</h3>
+              <p>A program that tells the full arc of my musical identity.</p>
+            </article>
+          </div>
+          <button class="carousel-btn carousel-btn--next" id="carousel-next" aria-label="Next">›</button>
+        </div>
+
+        <div class="carousel-dots" id="carousel-dots"></div>
+      </div>
+    </div>
+    <button class="btn-return btn-return--fixed" id="btn-return-d" hidden>Return to Violin</button>
+  </section>
+
+  <!-- ═══ SECTION 5 — G String Pathway ═══ -->
+  <section id="section-g" class="scene" data-scene="g" aria-hidden="true">
+    <div class="resonance-split">
+      <div class="split-panel split-panel--chemistry">
+        <span class="split-panel__label">Chemistry</span>
+        <h2>Scientific Resonance</h2>
+        <div class="molecule-viz" id="molecule-viz">
+          <div class="molecule-ring molecule-ring--1"></div>
+          <div class="molecule-ring molecule-ring--2"></div>
+          <div class="atom atom--c"></div>
+          <div class="atom atom--o"></div>
+          <div class="atom atom--h"></div>
+        </div>
+        <ul class="split-facts">
+          <li>Delocalized π electrons in resonance structures</li>
+          <li>Cellulose polymers in spruce soundboards</li>
+          <li>Material damping affects harmonic decay</li>
+        </ul>
+      </div>
+
+      <div class="split-divider" id="split-divider">
+        <canvas id="connection-canvas" aria-hidden="true"></canvas>
+        <div class="divider-glow"></div>
+      </div>
+
+      <div class="split-panel split-panel--music">
+        <span class="split-panel__label">Music</span>
+        <h2>Musical Resonance</h2>
+        <div class="wave-viz" id="wave-viz">
+          <svg viewBox="0 0 300 120" class="wave-svg">
+            <path class="wave-fundamental" d="M0,60 Q37.5,30 75,60 T150,60 T225,60 T300,60"/>
+            <path class="wave-overtone" d="M0,60 Q18.75,40 37.5,60 T75,60 T112.5,60 T150,60 T187.5,60 T225,60 T262.5,60 T300,60"/>
+          </svg>
+        </div>
+        <ul class="split-facts">
+          <li>Standing waves on vibrating strings</li>
+          <li>Harmonic overtones shape timbre</li>
+          <li>Resonance body amplifies fundamentals</li>
+        </ul>
+      </div>
+    </div>
+    <button class="btn-return btn-return--fixed" id="btn-return-g">Return to Violin</button>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="violin-audio.js"></script>
+  <script src="script.js"></script>
+
+  <!-- Three.js (ES modules via importmap) — powers the 3D violin -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="violin-3d.js"></script>
+</body>
+</html>

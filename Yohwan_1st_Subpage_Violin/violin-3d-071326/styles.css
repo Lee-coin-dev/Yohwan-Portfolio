@@ -1,0 +1,970 @@
+/* ── Design tokens ── */
+:root {
+  --bg: #080706;
+  --bg-warm: #0f0c09;
+  --text: #f0ebe3;
+  --text-muted: #8a8278;
+  --gold: #e8c547;
+  --gold-glow: rgba(232, 197, 71, 0.45);
+  --crimson: #6b1a2a;
+  --crimson-deep: #3d0f18;
+  --red-btn: #c0392b;
+  --red-btn-hover: #e74c3c;
+  --chem: #5b9fd4;
+  --music: #d4af37;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+/* Film grain */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+}
+
+/* ── Scene system ── */
+.scene {
+  position: fixed;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.scene--active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 10;
+}
+
+.scene--overlay {
+  z-index: 100;
+}
+
+/* ═══ SECTION 1 — Hub ═══ */
+#section-hub {
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, #151008 0%, var(--bg) 70%);
+}
+
+.hub-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1.75rem 2.5rem;
+}
+
+.hub-header__name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+}
+
+.hub-header__subtitle {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.violin-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.violin-3d-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.violin-3d-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.string {
+  stroke-linecap: round;
+  opacity: 0.75;
+  transition: stroke-width 0.3s, opacity 0.3s, filter 0.3s;
+  animation: stringAmbient 3s ease-in-out infinite;
+}
+
+.string--g { animation-delay: 0s; }
+.string--d { animation-delay: 0.4s; }
+.string--a { animation-delay: 0.8s; }
+
+@keyframes stringAmbient {
+  0%, 100% { opacity: 0.65; filter: drop-shadow(0 0 2px currentColor); }
+  50% { opacity: 0.95; filter: drop-shadow(0 0 8px currentColor); }
+}
+
+.string-hit {
+  cursor: pointer;
+  stroke-linecap: round;
+}
+
+.string-hit:hover + .string,
+.string-group:has(.string-hit:hover) .string[data-string] {
+  /* handled via JS class */
+}
+
+.string--hover {
+  stroke-width: 4 !important;
+  opacity: 1 !important;
+  filter: drop-shadow(0 0 14px currentColor) !important;
+}
+
+/* String labels */
+.string-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.string-label {
+  position: absolute;
+  left: var(--label-x);
+  top: var(--label-y);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  pointer-events: auto;
+  padding: 0.5rem 0.75rem;
+  transition: color 0.3s, opacity 0.3s, transform 0.3s;
+  animation: labelFloat 4s ease-in-out infinite, labelEntrance 0.6s ease-out backwards;
+}
+
+.string-label--g { animation-delay: 0s, 0.8s; }
+.string-label--d { animation-delay: 0.5s, 0.95s; }
+.string-label--a { animation-delay: 1s, 1.1s; }
+
+@keyframes labelEntrance {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.string-label:hover,
+.string-label.is-active {
+  transform: scale(1.06);
+  color: #ffffff;
+}
+
+/* while any label/string is hovered (tracked in JS, not pure CSS
+   :hover — the 3D canvas overlaps this area, which made pure :hover
+   state get stuck sometimes), dim the ones that aren't active */
+.string-labels.is-hovering .string-label:not(.is-active) {
+  color: var(--text-muted);
+  opacity: 0.55;
+}
+
+.string-label__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+
+@keyframes labelFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.hub-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  animation: hintPulse 3s ease-in-out infinite;
+}
+
+@keyframes hintPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* ═══ SECTION 2 — Resonance ═══ */
+#section-resonance {
+  background: rgba(0, 0, 0, 0.82);
+}
+
+.resonance-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resonance-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 10vw, 7rem);
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+  text-shadow:
+    0 0 20px var(--gold-glow),
+    0 0 60px rgba(232, 197, 71, 0.25),
+    0 0 120px rgba(232, 197, 71, 0.1);
+  animation: resonancePulse 1.5s ease-in-out;
+  z-index: 2;
+}
+
+@keyframes resonancePulse {
+  0% { opacity: 0; transform: scale(0.85); letter-spacing: 0.5em; }
+  30% { opacity: 1; transform: scale(1); }
+  70% { opacity: 1; transform: scale(1.02); }
+  100% { opacity: 0; transform: scale(1.05); letter-spacing: 0.4em; }
+}
+
+.resonance-particles,
+.resonance-notes {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.resonance-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: var(--gold);
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: 0 0 6px var(--gold);
+}
+
+.resonance-note {
+  position: absolute;
+  font-size: 1.5rem;
+  color: var(--gold);
+  opacity: 0;
+  text-shadow: 0 0 10px var(--gold-glow);
+}
+
+/* ═══ SECTION 3 — A String ═══ */
+#section-a {
+  background: var(--bg);
+}
+
+.a-scene {
+  position: absolute;
+  inset: 0;
+}
+
+.a-scene--stand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stage-spotlight {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60vw;
+  height: 80vh;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 230, 180, 0.18) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.music-stand-scene {
+  position: relative;
+  z-index: 2;
+  transform: translateY(8vh);
+}
+
+.music-stand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Shelf: book rests on the tray ledge */
+.music-stand__shelf {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.music-stand__tray {
+  width: 280px;
+  height: 12px;
+  margin-top: -6px;
+  background: linear-gradient(to bottom, #3a3a3a, #1a1a1a);
+  border-radius: 2px;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  z-index: 2;
+}
+
+.music-stand__leg {
+  width: 5px;
+  height: 130px;
+  margin-top: 0;
+  background: linear-gradient(to bottom, #444, #111);
+  box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.55);
+  z-index: 1;
+}
+
+.music-stand__base {
+  width: 48px;
+  height: 8px;
+  margin-top: -2px;
+  background: #222;
+  border-radius: 2px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.music-book {
+  position: relative;
+  width: 210px;
+  height: 270px;
+  transform-origin: bottom center;
+  z-index: 1;
+}
+
+.music-book__cover {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #1a1410 0%, #2a2018 50%, #1a1410 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 2px 6px 6px 2px;
+  box-shadow: 4px 8px 32px rgba(0, 0, 0, 0.7), inset 0 0 40px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.music-book__title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  color: var(--gold);
+}
+
+.music-book__subtitle {
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.btn-red {
+  position: absolute;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--red-btn);
+  color: #fff;
+  font-size: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px rgba(192, 57, 43, 0.5);
+  transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.btn-red:hover {
+  background: var(--red-btn-hover);
+  transform: scale(1.12);
+  box-shadow: 0 0 24px rgba(231, 76, 60, 0.6);
+}
+
+.btn-red--large {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0.75rem 2rem;
+  border-radius: 2rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Book viewport — fully hidden until user opens the compilation book */
+.a-scene--book {
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.a-scene--book.is-revealed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  background: radial-gradient(ellipse at center, #12100e, var(--bg));
+}
+
+.book-viewport {
+  width: min(90vw, 640px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.book-pages {
+  position: relative;
+  width: 100%;
+  min-height: 480px;
+  perspective: 1200px;
+}
+
+.book-page {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #f5f0e6 0%, #e8e0d0 100%);
+  color: #1a1410;
+  border-radius: 4px;
+  padding: 2.5rem;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: rotateY(-90deg);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+.book-page--active {
+  opacity: 1;
+  visibility: visible;
+  transform: rotateY(0deg);
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.book-page--turned {
+  opacity: 0.3;
+  transform: rotateY(90deg);
+  transform-origin: right center;
+  z-index: 1;
+}
+
+.book-page__year {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--crimson);
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.book-page__image {
+  width: 100%;
+  height: 140px;
+  border-radius: 4px;
+  margin-bottom: 1.25rem;
+  background-size: cover;
+  background-position: center;
+}
+
+.book-page__image--1 { background: linear-gradient(135deg, #2a1810, #5c3a21); }
+.book-page__image--2 { background: linear-gradient(135deg, #1a2030, #3a5070); }
+.book-page__image--3 { background: linear-gradient(135deg, #301818, #6b3030); }
+.book-page__image--4 { background: linear-gradient(135deg, #1a2818, #3a5030); }
+
+.book-page h3 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.book-page p {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin-bottom: 1rem;
+  color: #3a3530;
+}
+
+.book-page__milestones {
+  list-style: none;
+  font-size: 0.85rem;
+  color: #5a5550;
+}
+
+.book-page__milestones li {
+  padding: 0.35rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.book-page__milestones li::before {
+  content: "♪ ";
+  color: var(--crimson);
+}
+
+.book-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* ═══ SECTION 4 — D String ═══ */
+#section-d {
+  background: var(--crimson-deep);
+}
+
+.theater {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.theater__backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255, 200, 150, 0.08), transparent),
+    linear-gradient(to bottom, #1a0810, var(--crimson-deep));
+}
+
+.curtain {
+  position: absolute;
+  top: 0;
+  width: 52%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #4a0a18 0px,
+      #6b1a2a 8px,
+      #5a1522 16px,
+      #7a2035 24px,
+      #4a0a18 32px
+    );
+  z-index: 5;
+  cursor: pointer;
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.3s;
+}
+
+.curtain--left { left: 0; transform-origin: left center; }
+.curtain--right { right: 0; transform-origin: right center; }
+
+.curtain:hover {
+  box-shadow: inset 0 0 80px rgba(255, 200, 150, 0.1);
+}
+
+.curtain-prompt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 6;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-style: italic;
+  color: rgba(255, 220, 180, 0.7);
+  letter-spacing: 0.08em;
+  animation: hintPulse 2.5s ease-in-out infinite;
+}
+
+.performance-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  z-index: 3;
+}
+
+.performance-stage__title {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  margin-bottom: 0.35rem;
+}
+
+.performance-stage__subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 2.5rem;
+}
+
+.performance-carousel {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: min(90vw, 720px);
+}
+
+.carousel-btn {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--text);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.carousel-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--gold);
+}
+
+.carousel-track {
+  flex: 1;
+  position: relative;
+  min-height: 340px;
+  overflow: hidden;
+}
+
+.performance-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.5s, transform 0.5s;
+  pointer-events: none;
+}
+
+.performance-slide--active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.performance-slide__video {
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.video-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #1a0810, #3a1520);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.video-placeholder::before {
+  content: "▶";
+  font-size: 2rem;
+  color: rgba(232, 197, 71, 0.4);
+}
+
+.video-placeholder::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.performance-slide h3 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  margin-bottom: 0.35rem;
+}
+
+.performance-slide p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.carousel-dots {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.carousel-dot--active {
+  background: var(--gold);
+  transform: scale(1.25);
+}
+
+/* ═══ SECTION 5 — G String ═══ */
+#section-g {
+  background: var(--bg);
+}
+
+.resonance-split {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+}
+
+.split-panel {
+  padding: 4rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.split-panel--chemistry {
+  background: linear-gradient(135deg, #0a1018 0%, #0d1520 100%);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 40px) 100%, 0 100%);
+}
+
+.split-panel--music {
+  background: linear-gradient(225deg, #121008 0%, #1a1510 100%);
+  clip-path: polygon(40px 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.split-panel__label {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.split-panel--chemistry .split-panel__label { color: var(--chem); }
+.split-panel--music .split-panel__label { color: var(--music); }
+
+.split-panel h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  margin-bottom: 1.5rem;
+}
+
+.split-divider {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#connection-canvas {
+  position: absolute;
+  inset: -20vh 0;
+  width: 100%;
+  height: 140vh;
+  pointer-events: none;
+}
+
+.divider-glow {
+  width: 2px;
+  height: 60%;
+  background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+  box-shadow: 0 0 20px var(--gold-glow);
+  opacity: 0.6;
+}
+
+/* Molecule viz */
+.molecule-viz {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin-bottom: 1.5rem;
+}
+
+.molecule-ring {
+  position: absolute;
+  inset: 20%;
+  border: 2px solid rgba(91, 159, 212, 0.4);
+  border-radius: 50%;
+}
+
+.molecule-ring--1 { animation: molSpin 8s linear infinite; }
+.molecule-ring--2 {
+  inset: 10%;
+  animation: molSpin 6s linear infinite reverse;
+  border-style: dashed;
+}
+
+@keyframes molSpin {
+  to { transform: rotate(360deg); }
+}
+
+.atom {
+  position: absolute;
+  border-radius: 50%;
+  font-size: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}
+
+.atom--c { width: 28px; height: 28px; top: 30%; left: 35%; background: #333; color: #fff; }
+.atom--c::after { content: "C"; }
+.atom--o { width: 24px; height: 24px; top: 55%; left: 55%; background: var(--chem); color: #fff; }
+.atom--o::after { content: "O"; }
+.atom--h { width: 18px; height: 18px; top: 20%; left: 60%; background: #eee; color: #333; }
+.atom--h::after { content: "H"; }
+
+/* Wave viz */
+.wave-viz {
+  width: 100%;
+  max-width: 280px;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 4px;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.wave-svg { width: 100%; height: auto; }
+
+.wave-fundamental {
+  fill: none;
+  stroke: var(--music);
+  stroke-width: 2;
+  stroke-dasharray: 600;
+  animation: waveDraw 3s ease-in-out infinite;
+}
+
+.wave-overtone {
+  fill: none;
+  stroke: rgba(212, 175, 55, 0.4);
+  stroke-width: 1;
+  stroke-dasharray: 600;
+  animation: waveDraw 2s ease-in-out infinite reverse;
+}
+
+@keyframes waveDraw {
+  0% { stroke-dashoffset: 600; }
+  50% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -600; }
+}
+
+.split-facts {
+  list-style: none;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.split-facts li::before {
+  content: "→ ";
+  opacity: 0.5;
+}
+
+/* Return button */
+.btn-return {
+  padding: 0.65rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 2rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.btn-return:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--gold);
+}
+
+.btn-return--fixed {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 50;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .violin-composition { width: 180%; }
+
+  .string-label { font-size: 0.7rem; }
+
+  .resonance-split {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto 1fr;
+    overflow-y: auto;
+  }
+
+  .split-panel--chemistry,
+  .split-panel--music {
+    clip-path: none;
+    padding: 2.5rem 1.5rem;
+  }
+
+  .split-divider { height: 60px; }
+
+  #connection-canvas { height: 100%; inset: 0; }
+
+  .book-page { padding: 1.5rem; }
+  .book-page__year { font-size: 2rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .string, .string-label, .hub-hint, .curtain-prompt,
+  .resonance-title, .wave-fundamental, .wave-overtone,
+  .molecule-ring {
+    animation: none !important;
+  }
+}

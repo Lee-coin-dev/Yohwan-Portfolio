@@ -12,101 +12,31 @@
 <body>
   <div class="grain" aria-hidden="true"></div>
 
+  <nav class="site-nav" aria-label="Site navigation">
+    <a class="site-nav__brand" href="../Yohwan_Mainpage/Yohwan_Mainpage_TuningForks/index.html">John Kim</a>
+    <ul class="site-nav__links">
+      <li><a href="../Yohwan_Mainpage/Yohwan_Mainpage_TuningForks/index.html">Home</a></li>
+      <li><a href="#" class="is-active" data-nav="hub" aria-current="page">Violin</a></li>
+      <li><a href="../Yohwan_2nd_Subpage_Alchemy/index.html">Alchemy</a></li>
+      <li><a href="../Yohwan_3rd_Subpage_Rowing/index.html">Rowing</a></li>
+    </ul>
+    <ul class="site-nav__pathways" aria-label="String pathways">
+      <li><button type="button" data-nav-string="a">A String</button></li>
+      <li><button type="button" data-nav-string="d">D String</button></li>
+      <li><button type="button" data-nav-string="g">G String</button></li>
+    </ul>
+  </nav>
+
   <!-- ═══ SECTION 1 — Violin Navigation Hub ═══ -->
   <section id="section-hub" class="scene scene--active" data-scene="hub">
     <header class="hub-header">
-      <span class="hub-header__name">John Kim</span>
-      <span class="hub-header__subtitle">String Pathway</span>
+      <span class="hub-header__name">String Pathway</span>
+      <span class="hub-header__subtitle">Select a string</span>
     </header>
 
     <div class="violin-stage">
-      <svg class="violin-composition" viewBox="0 0 1200 900" xmlns="http://www.w3.org/2000/svg" aria-label="Interactive violin">
-        <defs>
-          <linearGradient id="varnish" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#A0522D"/>
-            <stop offset="35%" stop-color="#CD853F"/>
-            <stop offset="70%" stop-color="#8B4513"/>
-            <stop offset="100%" stop-color="#5C2E0A"/>
-          </linearGradient>
-          <linearGradient id="neckWood" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#2C1810"/>
-            <stop offset="100%" stop-color="#4A2C1A"/>
-          </linearGradient>
-          <linearGradient id="fingerboardGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#0f0a06"/>
-            <stop offset="50%" stop-color="#1a1208"/>
-            <stop offset="100%" stop-color="#0f0a06"/>
-          </linearGradient>
-          <radialGradient id="spotGrad" cx="50%" cy="30%" r="70%">
-            <stop offset="0%" stop-color="#FFE8C8" stop-opacity="0.15"/>
-            <stop offset="100%" stop-color="#FFE8C8" stop-opacity="0"/>
-          </radialGradient>
-          <filter id="violinShadow" x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="12" dy="24" stdDeviation="28" flood-color="#000" flood-opacity="0.55"/>
-          </filter>
-          <filter id="stringGlow" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur stdDeviation="4" result="blur"/>
-            <feMerge>
-              <feMergeNode in="blur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
-
-        <!-- Ambient stage light -->
-        <ellipse cx="600" cy="200" rx="500" ry="350" fill="url(#spotGrad)"/>
-
-        <g class="violin-assembly" transform="rotate(-28 600 450)" filter="url(#violinShadow)">
-          <!-- Scroll -->
-          <path d="M598,60 C570,55 545,35 530,10 C515,-15 535,-28 565,-18 C585,-10 598,20 598,60" fill="url(#neckWood)"/>
-          <!-- Peg box -->
-          <rect x="584" y="60" width="28" height="110" rx="5" fill="url(#neckWood)"/>
-          <g fill="#1a0f08">
-            <rect x="572" y="78" width="52" height="7" rx="3.5"/>
-            <rect x="572" y="102" width="52" height="7" rx="3.5"/>
-            <rect x="572" y="126" width="52" height="7" rx="3.5"/>
-            <rect x="572" y="150" width="52" height="7" rx="3.5"/>
-          </g>
-          <!-- Fingerboard -->
-          <rect x="590" y="170" width="16" height="280" rx="2" fill="url(#fingerboardGrad)"/>
-          <!-- Upper bout -->
-          <ellipse cx="598" cy="520" rx="130" ry="100" fill="url(#varnish)"/>
-          <!-- Lower bout -->
-          <ellipse cx="598" cy="660" rx="145" ry="108" fill="url(#varnish)"/>
-          <!-- Waist -->
-          <path d="M468,520 Q598,490 728,520 L728,580 Q598,550 468,580 Z" fill="url(#varnish)"/>
-          <!-- F-holes -->
-          <path d="M540,540 Q530,580 535,620 Q540,660 532,700" stroke="#1a0c06" stroke-width="4" fill="none" opacity="0.8"/>
-          <path d="M656,540 Q666,580 661,620 Q656,660 664,700" stroke="#1a0c06" stroke-width="4" fill="none" opacity="0.8"/>
-          <!-- Bridge -->
-          <path d="M585,490 L598,475 L611,490 L608,510 L588,510 Z" fill="#E8DCC8" stroke="#C4B8A8" stroke-width="1"/>
-          <!-- Tailpiece -->
-          <path d="M575,730 L598,755 L621,730 L615,730 L598,745 L581,730 Z" fill="#1a1208"/>
-          <!-- Chin rest -->
-          <ellipse cx="598" cy="770" rx="50" ry="12" fill="#2a1810" opacity="0.7"/>
-
-          <!-- Interactive strings -->
-          <g class="string-group" filter="url(#stringGlow)">
-            <line class="string string--g" data-string="g" x1="592" y1="170" x2="592" y2="730" stroke="#7eb8da" stroke-width="2"/>
-            <line class="string string--d" data-string="d" x1="596" y1="170" x2="596" y2="730" stroke="#d4af37" stroke-width="1.8"/>
-            <line class="string string--a" data-string="a" x1="600" y1="170" x2="600" y2="730" stroke="#f0c878" stroke-width="1.6"/>
-            <line class="string string--e" x1="604" y1="170" x2="604" y2="730" stroke="#ccc" stroke-width="1.2" opacity="0.35"/>
-          </g>
-
-          <!-- Hit areas (wider for click) -->
-          <line class="string-hit" data-string="g" x1="592" y1="170" x2="592" y2="730" stroke="transparent" stroke-width="24"/>
-          <line class="string-hit" data-string="d" x1="596" y1="170" x2="596" y2="730" stroke="transparent" stroke-width="24"/>
-          <line class="string-hit" data-string="a" x1="600" y1="170" x2="600" y2="730" stroke="transparent" stroke-width="24"/>
-
-          <!-- Bow -->
-          <g class="violin-bow" transform="rotate(12 598 420)">
-            <rect x="350" y="415" width="500" height="10" rx="5" fill="url(#neckWood)"/>
-            <rect x="340" y="412" width="30" height="16" rx="4" fill="#3d2314"/>
-            <rect x="830" y="412" width="30" height="16" rx="4" fill="#1a0f08"/>
-            <path d="M355,420 Q598,400 845,420" stroke="#E8E0D0" stroke-width="1.5" fill="none" opacity="0.5"/>
-          </g>
-        </g>
-      </svg>
+      <!-- 3D violin (Three.js loads assets/violin.glb into this container — see violin-3d.js) -->
+      <div id="violin-3d-container" class="violin-3d-container" aria-label="Interactive 3D violin"></div>
 
       <!-- Floating labels -->
       <div class="string-labels">
@@ -125,86 +55,39 @@
     <p class="hub-hint">Select a string to begin your pathway</p>
   </section>
 
-  <!-- ═══ SECTION 2 — Resonance Transition ═══ -->
-  <section id="section-resonance" class="scene scene--overlay" data-scene="resonance" aria-hidden="true">
-    <div class="resonance-overlay">
-      <div class="resonance-particles" id="resonance-particles"></div>
-      <div class="resonance-notes" id="resonance-notes"></div>
-      <h2 class="resonance-title">RESONANCE</h2>
-    </div>
-  </section>
-
   <!-- ═══ SECTION 3 — A String Pathway ═══ -->
   <section id="section-a" class="scene" data-scene="a" aria-hidden="true">
-    <!-- 3A: Music Stand -->
-    <div class="a-scene a-scene--stand" id="a-stand">
-      <div class="stage-spotlight"></div>
-      <div class="music-stand-scene">
-        <div class="music-stand">
-          <div class="music-stand__shelf">
-            <div class="music-book" id="music-book-closed">
-              <div class="music-book__cover">
-                <span class="music-book__title">Compilation</span>
-                <span class="music-book__subtitle">Musical Journey</span>
-              </div>
-              <button class="btn-red" id="btn-open-book" aria-label="Open compilation book">●</button>
-            </div>
-            <div class="music-stand__tray" aria-hidden="true"></div>
-          </div>
-          <div class="music-stand__leg"></div>
-          <div class="music-stand__base"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3B: Interactive Book (hidden until user opens the compilation book) -->
-    <div class="a-scene a-scene--book" id="a-book" aria-hidden="true">
+    <div class="a-scene a-scene--book is-revealed" id="a-book" aria-hidden="false">
       <div class="book-viewport">
         <div class="book-pages" id="book-pages">
-          <article class="book-page book-page--active" data-year="2019">
+          <article class="book-page book-page--cover book-page--active" data-year="cover">
+            <h2 class="book-cover__title">Musical Journey</h2>
+          </article>
+          <article class="book-page" data-year="2019">
             <span class="book-page__year">2019</span>
-            <div class="book-page__image book-page__image--1"></div>
-            <h3>First Steps</h3>
-            <p>Joined the school orchestra. Learned that discipline and vulnerability can coexist in the same bow stroke.</p>
-            <ul class="book-page__milestones">
-              <li>First ensemble performance</li>
-              <li>Regional youth orchestra audition</li>
-            </ul>
+            <h3>Experience in Dubai</h3>
+            <p>Turning point where violin shifted from a forced task by my parents to an active hobby that defined me and connected me to international culture at Regents. I was given the opportunity to play for the Emirates Youth Symphony Orchestra where I met the Sheikh of Dubai, Mohammed bin Rashid Al Maktoum.</p>
           </article>
           <article class="book-page" data-year="2022">
             <span class="book-page__year">2022</span>
-            <div class="book-page__image book-page__image--2"></div>
-            <h3>Finding Voice</h3>
-            <p>Chamber music changed how I listen — not to myself, but to the space between notes shared with others.</p>
-            <ul class="book-page__milestones">
-              <li>Chamber festival finalist</li>
-              <li>Started teaching younger students</li>
-            </ul>
+            <h3>Continuing my ABRSM journey</h3>
+            <p>Violin was no longer just an instrument I played, but a medium that shaped my life and friendships across the globe. Coming back to Korea, a cultural shift happened again, but violin again played a role of bridging the gap between me and the students who previously had been attending Seoul Academy. ABRSM was the visible marker that I continued from my time in Dubai until I left Korea to head to St. Andrew’s.</p>
           </article>
-          <article class="book-page" data-year="2024">
-            <span class="book-page__year">2024</span>
-            <div class="book-page__image book-page__image--3"></div>
-            <h3>Breaking Through</h3>
-            <p>Solo repertoire demanded honesty. Every phrase became a question I had to answer in real time.</p>
-            <ul class="book-page__milestones">
-              <li>State competition — top 3</li>
-              <li>Commissioned contemporary work premiere</li>
-            </ul>
+          <article class="book-page" data-year="2023">
+            <span class="book-page__year">2023–2024</span>
+            <h3>String Quartet &amp; Orchestra</h3>
+            <p>Violin opened up different paths for me as I stepped into the St. Andrew’s Campus. The first time when I went to the orchestra practice changed my previous perception of the ensemble. Going from a violin accompanist in Dubai to a small band-like orchestra in Seoul Academy (Korea), St. Andrew’s orchestra looked like what I was dreaming of: an inclusive space where individual talents turn into a space of learning and harmony. The concert master of my orchestra was no longer someone who simply wanted the title for their selfish benefit, but an overqualified leader who was competent to lead and improve the orchestra. Especially the winter concert featuring the famous waltz and sugar plum fairy felt dream-like, changing my perspective on my violin as a musical instrument.</p>
           </article>
           <article class="book-page" data-year="2026">
-            <span class="book-page__year">2026</span>
-            <div class="book-page__image book-page__image--4"></div>
-            <h3>Looking Forward</h3>
-            <p>Music and science converge in how I think about resonance — in halls, in labs, and in community.</p>
-            <ul class="book-page__milestones">
-              <li>Duke-bound — interdisciplinary path</li>
-              <li>Senior recital program curated</li>
-            </ul>
+            <span class="book-page__year">2025–2026</span>
+            <h3>Violin and I, Today</h3>
+            <p>I play violin till today. Continuing the legacy of Gabe the concert master and other Senior heads of their respective leading roles, I still perform as the Chamber Society and first violin of the orchestra. Most recently, for Awards Night at the Graduation Ceremony, I played as a Chamber Society. Although the role changed throughout my journey across different communities, there is no doubt that the violin is my steadfast best friend.</p>
           </article>
         </div>
         <div class="book-controls">
-          <button class="btn-red btn-red--large" id="btn-turn-page" aria-label="Turn page">Turn Page</button>
-          <button class="btn-return" id="btn-return-a" hidden>Return to Violin</button>
+          <button class="book-nav-btn" id="btn-book-prev" aria-label="Previous page" disabled>‹</button>
+          <button class="book-nav-btn" id="btn-book-next" aria-label="Next page">›</button>
+          <button class="btn-return" id="btn-return-a">Return to Violin</button>
         </div>
       </div>
     </div>
@@ -265,44 +148,71 @@
 
   <!-- ═══ SECTION 5 — G String Pathway ═══ -->
   <section id="section-g" class="scene" data-scene="g" aria-hidden="true">
-    <div class="resonance-split">
-      <div class="split-panel split-panel--chemistry">
-        <span class="split-panel__label">Chemistry</span>
-        <h2>Scientific Resonance</h2>
-        <div class="molecule-viz" id="molecule-viz">
-          <div class="molecule-ring molecule-ring--1"></div>
-          <div class="molecule-ring molecule-ring--2"></div>
-          <div class="atom atom--c"></div>
-          <div class="atom atom--o"></div>
-          <div class="atom atom--h"></div>
-        </div>
-        <ul class="split-facts">
-          <li>Delocalized π electrons in resonance structures</li>
-          <li>Cellulose polymers in spruce soundboards</li>
-          <li>Material damping affects harmonic decay</li>
-        </ul>
-      </div>
-
-      <div class="split-divider" id="split-divider">
-        <canvas id="connection-canvas" aria-hidden="true"></canvas>
-        <div class="divider-glow"></div>
-      </div>
-
-      <div class="split-panel split-panel--music">
-        <span class="split-panel__label">Music</span>
+    <div class="g-resonance">
+      <article class="g-panel g-panel--music">
+        <span class="g-panel__label">Music</span>
         <h2>Musical Resonance</h2>
-        <div class="wave-viz" id="wave-viz">
-          <svg viewBox="0 0 300 120" class="wave-svg">
-            <path class="wave-fundamental" d="M0,60 Q37.5,30 75,60 T150,60 T225,60 T300,60"/>
-            <path class="wave-overtone" d="M0,60 Q18.75,40 37.5,60 T75,60 T112.5,60 T150,60 T187.5,60 T225,60 T262.5,60 T300,60"/>
+        <div class="g-wave" aria-hidden="true">
+          <svg viewBox="0 0 320 72" class="g-wave__svg">
+            <path class="g-wave__fundamental" d="M0,36 Q40,8 80,36 T160,36 T240,36 T320,36"/>
+            <path class="g-wave__overtone" d="M0,36 Q20,18 40,36 T80,36 T120,36 T160,36 T200,36 T240,36 T280,36 T320,36"/>
           </svg>
         </div>
-        <ul class="split-facts">
-          <li>Standing waves on vibrating strings</li>
-          <li>Harmonic overtones shape timbre</li>
-          <li>Resonance body amplifies fundamentals</li>
-        </ul>
+        <div class="g-panel__body">
+          <p>While rehearsing a piece from <em>Spirited Away</em> in the chapel, I became captivated by the way each note lingered in the air. The sound seemed richer and more sustained than in our rehearsal room. Although I had experienced these differences in chapels, concert halls, and even gymnasiums, I had never stopped to ask why.</p>
+          <p>As I learned more about sound, my curiosity gradually shifted from where music was performed to the instrument producing it. This made me wonder why different woods create different tones and resonances.</p>
+          <p>Learning about material science revealed far more than why violins sound different. I was fascinated that properties invisible to the eye could dramatically shape what we hear. Understanding how density, stiffness, and internal structure influence resonance answered one question but opened a larger one: how do microscopic material properties shape macroscopic experiences?</p>
+        </div>
+      </article>
+
+      <div class="g-bridge" aria-hidden="true">
+        <canvas id="connection-canvas"></canvas>
+        <div class="g-bridge__glow"></div>
+        <span class="g-bridge__label">micro → macro</span>
       </div>
+
+      <article class="g-panel g-panel--chem">
+        <span class="g-panel__label">Chemistry</span>
+        <h2>Chemistry Resonance</h2>
+        <p class="g-panel__lead">Three woods of the violin — and how material science shapes the frequencies we hear.</p>
+
+        <div class="wood-tabs" role="tablist" aria-label="Violin woods">
+          <button class="wood-tab is-active" role="tab" aria-selected="true" data-wood="spruce">Spruce</button>
+          <button class="wood-tab" role="tab" aria-selected="false" data-wood="ebony">Ebony</button>
+          <button class="wood-tab" role="tab" aria-selected="false" data-wood="maple">Maple</button>
+        </div>
+
+        <div class="wood-stage">
+          <div class="wood-swatch" id="wood-swatch" data-wood="spruce" aria-hidden="true"></div>
+          <div class="wood-detail is-active" data-wood-panel="spruce" role="tabpanel">
+            <h3>Spruce — Soundboard</h3>
+            <p>Light, stiff, and highly anisotropic. Spruce’s low density and strong grain direction let the top plate vibrate freely, converting string energy into airborne sound with remarkable efficiency.</p>
+            <ul class="wood-props">
+              <li><strong>Density</strong> Low — favors loud projection</li>
+              <li><strong>Stiffness</strong> High along the grain</li>
+              <li><strong>Resonance</strong> Broad, singing fundamentals</li>
+            </ul>
+          </div>
+          <div class="wood-detail" data-wood-panel="ebony" role="tabpanel" hidden>
+            <h3>Ebony — Fingerboard</h3>
+            <p>Extremely dense and hard. Ebony resists wear under the fingers and damps excess vibration so the neck stays stable while the body — not the fingerboard — carries the resonant voice.</p>
+            <ul class="wood-props">
+              <li><strong>Density</strong> Very high — durable contact surface</li>
+              <li><strong>Stiffness</strong> Rigid under string pressure</li>
+              <li><strong>Resonance</strong> Controlled damping, clean attack</li>
+            </ul>
+          </div>
+          <div class="wood-detail" data-wood-panel="maple" role="tabpanel" hidden>
+            <h3>Maple — Back &amp; Ribs</h3>
+            <p>Denser than spruce, maple reflects and shapes sound from within the body. Its figure and elastic properties help define projection, focus, and the violin’s characteristic warmth.</p>
+            <ul class="wood-props">
+              <li><strong>Density</strong> Medium-high — reflective shell</li>
+              <li><strong>Stiffness</strong> Balanced elasticity</li>
+              <li><strong>Resonance</strong> Focused overtones &amp; body color</li>
+            </ul>
+          </div>
+        </div>
+      </article>
     </div>
     <button class="btn-return btn-return--fixed" id="btn-return-g">Return to Violin</button>
   </section>
@@ -310,5 +220,16 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="violin-audio.js"></script>
   <script src="script.js"></script>
+
+  <!-- Three.js (ES modules via importmap) — powers the 3D violin -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="violin-3d.js"></script>
 </body>
 </html>

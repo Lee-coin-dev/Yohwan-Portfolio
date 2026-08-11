@@ -2,13 +2,10 @@
 
 const SCENES = {
   hub: document.getElementById("section-hub"),
-  resonance: document.getElementById("section-resonance"),
   a: document.getElementById("section-a"),
   d: document.getElementById("section-d"),
   g: document.getElementById("section-g"),
 };
-
-const ROUTES = { a: "section-a", d: "section-d", g: "section-g" };
 
 let activeScene = "hub";
 let selectedString = null;
@@ -28,19 +25,10 @@ function showScene(name) {
     el.setAttribute("aria-hidden", isActive ? "false" : "true");
   });
   activeScene = name;
+  updateNavActive(name);
 
   if (name === "g") startConnectionCanvas();
   else stopConnectionCanvas();
-}
-
-function transitionTo(fromEl, toEl, onComplete) {
-  gsap.timeline({
-    onComplete,
-  })
-    .to(fromEl, { opacity: 0, duration: 0.5, ease: "power2.inOut" })
-    .set(fromEl, { visibility: "hidden", pointerEvents: "none" })
-    .set(toEl, { visibility: "visible", pointerEvents: "auto", opacity: 0 })
-    .to(toEl, { opacity: 1, duration: 0.6, ease: "power2.out" });
 }
 
 function goToHub() {
@@ -59,6 +47,7 @@ function goToHub() {
       gsap.set(hub, { opacity: 1, visibility: "visible" });
       activeScene = "hub";
       selectedString = null;
+      updateNavActive("hub");
       stopConnectionCanvas();
     },
   })
@@ -70,13 +59,10 @@ function resetPathways() {
   bookPageIndex = 0;
   carouselIndex = 0;
 
-  document.getElementById("a-stand").hidden = false;
-  document.getElementById("a-stand").style.opacity = "";
-  document.getElementById("a-book").classList.remove("is-revealed");
-  document.getElementById("a-book").setAttribute("aria-hidden", "true");
-  gsap.set("#music-book-closed", { scale: 1, clearProps: "transform" });
-  document.getElementById("btn-turn-page").hidden = false;
-  document.getElementById("btn-return-a").hidden = true;
+  const bookScene = document.getElementById("a-book");
+  bookScene.classList.add("is-revealed");
+  bookScene.setAttribute("aria-hidden", "false");
+  updateBookNavButtons();
 
   document.getElementById("performance-stage").hidden = true;
   document.getElementById("curtain-prompt").hidden = false;
@@ -88,12 +74,25 @@ function resetPathways() {
     page.classList.remove("book-page--turned");
     page.style.visibility = "";
     page.style.opacity = "";
+    page.style.transform = "";
   });
 
   performanceSlides.forEach((slide, i) => {
     slide.classList.toggle("performance-slide--active", i === 0);
   });
   updateCarouselDots();
+}
+
+function updateNavActive(scene) {
+  document.querySelectorAll("[data-nav-string]").forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.navString === scene);
+  });
+  const violinLink = document.querySelector('[data-nav="hub"]');
+  if (violinLink) {
+    violinLink.classList.toggle("is-active", scene === "hub");
+    if (scene === "hub") violinLink.setAttribute("aria-current", "page");
+    else violinLink.removeAttribute("aria-current");
+  }
 }
 
 /* ── Section 1: String interaction ── */
@@ -119,120 +118,144 @@ function selectString(key) {
   if (activeScene !== "hub") return;
   selectedString = key;
   ViolinAudio.playNote(key);
-  playResonanceTransition(key);
-}
-
-/* ── Section 2: Resonance ── */
-function playResonanceTransition(stringKey) {
-  const resonance = SCENES.resonance;
-  const hub = SCENES.hub;
-
-  resonance.classList.add("scene--active");
-  resonance.setAttribute("aria-hidden", "false");
-  spawnResonanceEffects();
-
-  gsap.timeline({
-    onComplete: () => enterPathway(stringKey),
-  })
-    .to(hub, { opacity: 0, duration: 0.4, ease: "power2.in" })
-    .fromTo(resonance, { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0)
-    .to(resonance, { opacity: 0, duration: 0.4, ease: "power2.out", delay: 1.1 })
-    .set(resonance, { visibility: "hidden" })
-    .set(hub, { visibility: "hidden", opacity: 0 });
-}
-
-function spawnResonanceEffects() {
-  const particles = document.getElementById("resonance-particles");
-  const notes = document.getElementById("resonance-notes");
-  particles.innerHTML = "";
-  notes.innerHTML = "";
-
-  const noteSymbols = ["♩", "♪", "♫", "♬"];
-
-  for (let i = 0; i < 20; i++) {
-    const p = document.createElement("div");
-    p.className = "resonance-particle";
-    p.style.left = `${Math.random() * 100}%`;
-    p.style.top = `${Math.random() * 100}%`;
-    particles.appendChild(p);
-
-    gsap.fromTo(p,
-      { opacity: 0, scale: 0 },
-      { opacity: 0.8, scale: 1, duration: 0.6, delay: Math.random() * 0.5,
-        y: -30 - Math.random() * 60, x: (Math.random() - 0.5) * 80,
-        ease: "sine.out" }
-    );
-    gsap.to(p, { opacity: 0, duration: 0.5, delay: 0.8 + Math.random() * 0.5 });
-  }
-
-  for (let i = 0; i < 6; i++) {
-    const n = document.createElement("div");
-    n.className = "resonance-note";
-    n.textContent = noteSymbols[i % noteSymbols.length];
-    n.style.left = `${15 + Math.random() * 70}%`;
-    n.style.top = `${20 + Math.random() * 60}%`;
-    notes.appendChild(n);
-
-    gsap.fromTo(n,
-      { opacity: 0, y: 20 },
-      { opacity: 0.7, y: -40 - Math.random() * 40, duration: 1.2, delay: 0.1 + i * 0.12, ease: "sine.out" }
-    );
-    gsap.to(n, { opacity: 0, duration: 0.4, delay: 1.0 });
-  }
+  enterPathway(key);
 }
 
 function enterPathway(stringKey) {
+  const hub = SCENES.hub;
   const target = SCENES[stringKey];
-  showScene(stringKey);
-  gsap.fromTo(target, { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "power2.out" });
+  if (!target) return;
+
+  if (stringKey === "a") {
+    resetPathways();
+  }
+
+  gsap.timeline({
+    onComplete: () => {
+      showScene(stringKey);
+      gsap.set(target, { opacity: 1, visibility: "visible" });
+    },
+  })
+    .to(hub, { opacity: 0, duration: 0.45, ease: "power2.in" })
+    .set(hub, { visibility: "hidden" })
+    .fromTo(target, { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" });
+}
+
+/* ── Top navigation ── */
+function initNav() {
+  const violinLink = document.querySelector('[data-nav="hub"]');
+  if (violinLink) {
+    violinLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (activeScene === "hub") return;
+      goToHub();
+    });
+  }
+
+  document.querySelectorAll("[data-nav-string]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.navString;
+      if (!key || !SCENES[key]) return;
+
+      if (activeScene === "hub") {
+        selectString(key);
+        return;
+      }
+
+      if (activeScene === key) return;
+
+      resetPathways();
+      const from = SCENES[activeScene];
+      const to = SCENES[key];
+
+      gsap.timeline({
+        onComplete: () => {
+          showScene(key);
+          selectedString = key;
+          gsap.set(to, { opacity: 1, visibility: "visible" });
+        },
+      })
+        .to(from, { opacity: 0, duration: 0.4, ease: "power2.in" })
+        .fromTo(to, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" });
+    });
+  });
 }
 
 /* ── Section 3: A String ── */
 function initAString() {
-  document.getElementById("btn-open-book").addEventListener("click", openBook);
-  document.getElementById("btn-turn-page").addEventListener("click", turnBookPage);
+  document.getElementById("btn-book-prev").addEventListener("click", () => goToBookPage(bookPageIndex - 1));
+  document.getElementById("btn-book-next").addEventListener("click", () => goToBookPage(bookPageIndex + 1));
   document.getElementById("btn-return-a").addEventListener("click", goToHub);
+  updateBookNavButtons();
 }
 
-function openBook() {
-  const stand = document.getElementById("a-stand");
-  const bookScene = document.getElementById("a-book");
-  const closedBook = document.getElementById("music-book-closed");
-
-  gsap.timeline({
-    onComplete: () => {
-      stand.hidden = true;
-      bookScene.classList.add("is-revealed");
-      bookScene.setAttribute("aria-hidden", "false");
-    },
-  })
-    .to(closedBook, { scale: 2.8, duration: 0.75, ease: "power2.inOut", transformOrigin: "50% 100%" })
-    .to(stand, { opacity: 0, duration: 0.35 }, "-=0.15");
+function updateBookNavButtons() {
+  const prev = document.getElementById("btn-book-prev");
+  const next = document.getElementById("btn-book-next");
+  if (!prev || !next) return;
+  prev.disabled = bookPageIndex <= 0;
+  next.disabled = bookPageIndex >= bookPages.length - 1;
 }
 
-function turnBookPage() {
-  if (bookPageIndex >= bookPages.length - 1) return;
+let bookTurning = false;
+
+function goToBookPage(index) {
+  if (bookTurning) return;
+  const max = bookPages.length - 1;
+  const nextIndex = Math.max(0, Math.min(max, index));
+  if (nextIndex === bookPageIndex) return;
 
   const current = bookPages[bookPageIndex];
-  const next = bookPages[bookPageIndex + 1];
+  const target = bookPages[nextIndex];
+  const goingForward = nextIndex > bookPageIndex;
 
-  gsap.timeline()
-    .to(current, { rotateY: 90, opacity: 0.3, duration: 0.5, ease: "power2.in", transformOrigin: "left center" })
-    .call(() => {
-      current.classList.remove("book-page--active");
-      current.classList.add("book-page--turned");
-      current.style.visibility = "hidden";
-      next.classList.add("book-page--active");
-      next.style.visibility = "visible";
+  bookTurning = true;
+
+  if (goingForward) {
+    gsap.timeline({
+      onComplete: () => {
+        bookTurning = false;
+        updateBookNavButtons();
+      },
     })
-    .fromTo(next, { rotateY: -90, opacity: 0 }, { rotateY: 0, opacity: 1, duration: 0.5, ease: "power2.out", transformOrigin: "left center" });
-
-  bookPageIndex++;
-
-  if (bookPageIndex >= bookPages.length - 1) {
-    document.getElementById("btn-turn-page").hidden = true;
-    document.getElementById("btn-return-a").hidden = false;
+      .to(current, { rotateY: 90, opacity: 0.3, duration: 0.45, ease: "power2.in", transformOrigin: "left center" })
+      .call(() => {
+        current.classList.remove("book-page--active");
+        current.classList.add("book-page--turned");
+        current.style.visibility = "hidden";
+        target.classList.add("book-page--active");
+        target.classList.remove("book-page--turned");
+        target.style.visibility = "visible";
+      })
+      .fromTo(
+        target,
+        { rotateY: -90, opacity: 0 },
+        { rotateY: 0, opacity: 1, duration: 0.45, ease: "power2.out", transformOrigin: "left center" }
+      );
+  } else {
+    gsap.timeline({
+      onComplete: () => {
+        bookTurning = false;
+        updateBookNavButtons();
+      },
+    })
+      .to(current, { rotateY: -90, opacity: 0.3, duration: 0.45, ease: "power2.in", transformOrigin: "left center" })
+      .call(() => {
+        current.classList.remove("book-page--active");
+        current.classList.remove("book-page--turned");
+        current.style.visibility = "hidden";
+        target.classList.add("book-page--active");
+        target.classList.remove("book-page--turned");
+        target.style.visibility = "visible";
+      })
+      .fromTo(
+        target,
+        { rotateY: 90, opacity: 0 },
+        { rotateY: 0, opacity: 1, duration: 0.45, ease: "power2.out", transformOrigin: "left center" }
+      );
   }
+
+  bookPageIndex = nextIndex;
 }
 
 /* ── Section 4: D String ── */
@@ -309,9 +332,34 @@ function goToSlide(index) {
   updateCarouselDots();
 }
 
-/* ── Section 5: G String — connection canvas ── */
+/* ── Section 5: G String — woods + connection canvas ── */
 function initGString() {
   document.getElementById("btn-return-g").addEventListener("click", goToHub);
+
+  const tabs = document.querySelectorAll(".wood-tab");
+  const panels = document.querySelectorAll("[data-wood-panel]");
+  const swatch = document.getElementById("wood-swatch");
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const wood = tab.dataset.wood;
+      if (!wood) return;
+
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.classList.toggle("is-active", on);
+        t.setAttribute("aria-selected", on ? "true" : "false");
+      });
+
+      panels.forEach((panel) => {
+        const on = panel.dataset.woodPanel === wood;
+        panel.classList.toggle("is-active", on);
+        panel.hidden = !on;
+      });
+
+      if (swatch) swatch.dataset.wood = wood;
+    });
+  });
 }
 
 let connectionResizeHandler = null;
@@ -386,13 +434,16 @@ function stopConnectionCanvas() {
   }
 }
 
+/* Expose for violin-3d.js */
+window.selectString = selectString;
+window.highlightString = highlightString;
+
 /* ── Boot ── */
+initNav();
 initHub();
 initAString();
 initDString();
 initGString();
+updateNavActive("hub");
 
-/* Hub entrance animation */
-gsap.from(".violin-assembly", { opacity: 0, scale: 0.9, duration: 1.2, ease: "power2.out", delay: 0.2 });
-gsap.from(".string-label", { opacity: 0, y: 20, duration: 0.6, stagger: 0.15, ease: "power2.out", delay: 0.8 });
 gsap.from(".hub-hint", { opacity: 0, duration: 0.6, delay: 1.4 });
