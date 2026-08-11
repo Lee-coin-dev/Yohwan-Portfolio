@@ -4,12 +4,18 @@
    ========================================================= */
 
 const scenes = Array.from(document.querySelectorAll('.scene'));
-const dots = Array.from(document.querySelectorAll('.stage-indicator .dot'));
+const stageNavBtns = Array.from(document.querySelectorAll('[data-nav-scene]'));
 const flash = document.getElementById('flash');
 const zoomText = document.getElementById('zoom-text');
 
 let current = -1;
 let busy = false;
+
+function updateStageNav(index) {
+  stageNavBtns.forEach((btn) => {
+    btn.classList.toggle('is-active', Number(btn.dataset.navScene) === index);
+  });
+}
 
 /* ---------- Scene navigation ---------- */
 function showScene(index, { withFlash = true } = {}) {
@@ -18,7 +24,7 @@ function showScene(index, { withFlash = true } = {}) {
 
   const enter = () => {
     scenes.forEach((s, i) => s.classList.toggle('active', i === index));
-    dots.forEach((d, i) => d.classList.toggle('on', i === index));
+    updateStageNav(index);
     current = index;
     initScene(index);
     busy = false;
@@ -110,7 +116,7 @@ function animateReactionSetup() {
     // Step 3 — philosopher's stone descends
     .to('#scene-3 .stone-floating', { opacity: 1, y: 0, duration: 1.0, ease: 'bounce.out' }, '+=0.1')
     .add(() => spawnBubbles())
-    .fromTo('#btn-heat', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'back.out(1.6)' })
+    .fromTo('#btn-heat', { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.55, ease: 'back.out(1.4)' })
     .fromTo('#scene-3 .hint-3', { opacity: 0 }, { opacity: 0.7, duration: 0.6 }, '<');
 
   // gentle floating of the stone
@@ -181,7 +187,8 @@ function animateTransformation() {
     // fade vortex back, reveal info bubble
     .to('#vortex', { opacity: 0.35, duration: 1.0 }, '+=0.6')
     .to('#info-4', { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: 'back.out(1.4)' }, '<0.2')
-    .from('#info-4 .tag-row li', { y: 12, opacity: 0, stagger: 0.08, duration: 0.4 }, '<0.3');
+    .from('#info-4 .mirage-eras li', { y: 12, opacity: 0, stagger: 0.08, duration: 0.4 }, '<0.3')
+    .from('#info-4 .mirage-actions', { y: 10, opacity: 0, duration: 0.4 }, '<0.2');
 }
 
 document.getElementById('btn-final-product').addEventListener('click', () => showScene(4));
@@ -230,7 +237,8 @@ function animateMeaning() {
   gsap.fromTo('#info-6',
     { opacity: 0, scale: 0.9, y: 24 },
     { opacity: 1, scale: 1, y: 0, duration: 0.9, ease: 'back.out(1.3)' });
-  gsap.from('#info-6 .meaning-card', { y: 24, opacity: 0, stagger: 0.15, duration: 0.6, delay: 0.4 });
+  gsap.from('#info-6 .gold-tags li', { y: 12, opacity: 0, stagger: 0.08, duration: 0.4, delay: 0.35 });
+  gsap.from('#info-6 .gold-actions', { y: 10, opacity: 0, duration: 0.4, delay: 0.5 });
 }
 
 document.getElementById('btn-restart').addEventListener('click', () => {
@@ -238,8 +246,18 @@ document.getElementById('btn-restart').addEventListener('click', () => {
   showScene(0);
 });
 
-/* ---------- dot navigation ---------- */
-dots.forEach((d) => d.addEventListener('click', () => showScene(Number(d.dataset.go))));
+/* ---------- top / stage navigation ---------- */
+stageNavBtns.forEach((btn) => {
+  btn.addEventListener('click', () => showScene(Number(btn.dataset.navScene)));
+});
+
+const alchemyHome = document.querySelector('[data-nav="alchemy"]');
+if (alchemyHome) {
+  alchemyHome.addEventListener('click', (e) => {
+    e.preventDefault();
+    showScene(0);
+  });
+}
 
 /* =========================================================
    FLOATING DUST PARTICLES (shared ambient canvas)

@@ -93,25 +93,12 @@
       gap: 0.09em;
     }
 
-    /* each name wrapped with an outline rect */
+    /* each name block */
     .name-block {
       position: relative;
       display: inline-block;
       will-change: transform;
     }
-
-    /* thin-border rectangle that overlaps the adjacent name */
-    .name-rect {
-      position: absolute;
-      top: -10px; bottom: -10px;
-      border: 1px solid rgba(200, 215, 230, 0.22);
-      pointer-events: none;
-      will-change: transform, opacity;
-    }
-    /* JOHN's rect extends 32px toward KIM */
-    #blockJohn .name-rect { left: -14px; right: -32px; }
-    /* KIM's rect extends 32px toward JOHN */
-    #blockKim  .name-rect { left: -32px; right: -14px; }
 
     .hero-name {
       font-family: 'Cormorant Garamond', serif;
@@ -168,8 +155,7 @@
 
     .forks-row {
       display: flex;
-      /* ~20% wider gap than original 7vw / 7rem */
-      gap: clamp(3.5rem, 8.5vw, 8.5rem);
+      gap: clamp(4.5rem, 10vw, 11rem);
       align-items: flex-end;
       justify-content: center;
     }
@@ -179,12 +165,12 @@
       flex-direction: column;
       align-items: center;
       cursor: pointer;
-      gap: 1.8rem;
+      gap: 2.2rem;
       /* initial hidden state set by JS */
     }
 
     .fork-svg-wrap {
-      width: clamp(46px, 5.8vw, 74px);
+      width: clamp(72px, 9vw, 118px);
       will-change: transform;
       transform-origin: center bottom;
     }
@@ -197,13 +183,13 @@
     .fork-title {
       font-family: 'Cormorant Garamond', serif;
       font-weight: 400;
-      font-size: clamp(1.2rem, 2.4vw, 1.75rem);
+      font-size: clamp(1.55rem, 3.2vw, 2.35rem);
       color: var(--silver-hi);
       letter-spacing: 0.04em;
-      margin-bottom: 0.32rem;
+      margin-bottom: 0.4rem;
     }
     .fork-desc {
-      font-size: 0.56rem;
+      font-size: 0.68rem;
       letter-spacing: 0.4em;
       text-transform: uppercase;
       color: var(--silver-lo);
@@ -267,18 +253,33 @@
       font-size: clamp(0.85rem, 1.5vw, 1rem); font-weight: 300;
       color: var(--silver); line-height: 1.9; margin-bottom: 3.5rem;
     }
-    .sub-back {
+    .sub-back,
+    .sub-go {
       display: inline-block;
       font-size: 0.56rem; letter-spacing: 0.42em; text-transform: uppercase;
       color: var(--silver); cursor: pointer;
       border: 1px solid rgba(184, 202, 216, 0.25);
       padding: 0.9rem 2.4rem;
       transition: border-color 0.28s, color 0.28s, background 0.28s;
+      text-decoration: none;
     }
-    .sub-back:hover {
+    .sub-back:hover,
+    .sub-go:hover {
       border-color: rgba(184, 202, 216, 0.65);
       color: var(--silver-hi);
       background: rgba(184, 202, 216, 0.05);
+    }
+    .sub-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      justify-content: center;
+      align-items: center;
+    }
+    .sub-go {
+      border-color: rgba(184, 202, 216, 0.45);
+      color: var(--silver-hi);
+      background: rgba(184, 202, 216, 0.06);
     }
   </style>
 </head>
@@ -297,14 +298,12 @@
   </div>
   <p id="pulseLabel">Resonance</p>
 
-  <!-- JOHN / KIM with overlapping outline rects -->
+  <!-- JOHN / KIM -->
   <div class="hero-content">
     <div class="name-block" id="blockJohn">
-      <div class="name-rect"></div>
       <span class="hero-name" id="heroJohn">JOHN</span>
     </div>
     <div class="name-block" id="blockKim">
-      <div class="name-rect"></div>
       <span class="hero-name" id="heroKim">KIM</span>
     </div>
   </div>
@@ -407,7 +406,10 @@
     <h2 class="sub-title">Violin</h2>
     <div class="sub-divider"></div>
     <p class="sub-desc">A journey through string resonance — the harmonic bond between bow and string, vibrating in perfect unison.</p>
-    <div class="sub-back" data-idx="0">← Return</div>
+    <div class="sub-actions">
+      <div class="sub-back" data-idx="0">← Return</div>
+      <a class="sub-go" href="../../Yohwan_1st_Subpage_Violin/index.html">Go to Section</a>
+    </div>
   </div>
 </div>
 
@@ -431,7 +433,10 @@
     <h2 class="sub-title">Alchemy</h2>
     <div class="sub-divider"></div>
     <p class="sub-desc">Transmutation and transformation — where elements converge in unexpected resonance to become something entirely new.</p>
-    <div class="sub-back" data-idx="1">← Return</div>
+    <div class="sub-actions">
+      <div class="sub-back" data-idx="1">← Return</div>
+      <a class="sub-go" href="../../Yohwan_2nd_Subpage_Alchemy/index.html">Go to Section</a>
+    </div>
   </div>
 </div>
 
@@ -455,7 +460,10 @@
     <h2 class="sub-title">Rowing</h2>
     <div class="sub-divider"></div>
     <p class="sub-desc">Eight oars, one rhythm — synchronized motion where collective effort resonates into seamless, unstoppable momentum.</p>
-    <div class="sub-back" data-idx="2">← Return</div>
+    <div class="sub-actions">
+      <div class="sub-back" data-idx="2">← Return</div>
+      <a class="sub-go" href="../../Yohwan_3rd_Subpage_Rowing/index.html">Go to Section</a>
+    </div>
   </div>
 </div>
 
@@ -594,7 +602,6 @@ gsap.registerPlugin(ScrollTrigger);
   gsap.set('#pulseWrap',  { autoAlpha: 0 });
   gsap.set('#pulseLabel', { autoAlpha: 0 });
   gsap.set('.name-block', { autoAlpha: 0 });
-  gsap.set('.name-rect',  { opacity: 0 });
   gsap.set('#scrollHint', { autoAlpha: 0 });
 
   /* --- page-load entrance --- */
@@ -602,7 +609,6 @@ gsap.registerPlugin(ScrollTrigger);
   enter
     .to('#blockJohn', { autoAlpha: 1, x: 0, duration: 1.15, ease: 'power3.out' }, 0)
     .to('#blockKim',  { autoAlpha: 1, x: 0, duration: 1.15, ease: 'power3.out' }, 0.14)
-    .to('.name-rect', { opacity: 1, duration: 0.9, stagger: 0.1, ease: 'power2.out' }, 0.35)
     .to('#scrollHint', { autoAlpha: 0.52, duration: 0.7 }, 0.6);
 
   /* set off-screen for entrance */
@@ -641,7 +647,6 @@ gsap.registerPlugin(ScrollTrigger);
     .to('#blockKim',  { x: '44vw',  ease: 'power1.inOut', duration: 3.5 }, 0)
     .to('#heroJohn',  { opacity: 0.1, duration: 2 }, 0.6)
     .to('#heroKim',   { opacity: 0.1, duration: 2 }, 0.6)
-    .to('.name-rect', { opacity: 0.04, duration: 1.8 }, 0.6)
 
     /* pulse emerges */
     .to('#pulseWrap',  { autoAlpha: 1, duration: 2.2 }, 1.5)
@@ -661,7 +666,7 @@ gsap.registerPlugin(ScrollTrigger);
   gsap.set(forkItems, { autoAlpha: 0, y: 40 });
   gsap.set('#forksLabel', { autoAlpha: 0, y: 14 });
   /* also hide all overlay content for first open */
-  document.querySelectorAll('.sub-tag,.sub-title,.sub-divider,.sub-desc,.sub-back')
+  document.querySelectorAll('.sub-tag,.sub-title,.sub-divider,.sub-desc,.sub-actions')
     .forEach(el => gsap.set(el, { autoAlpha: 0, y: 20 }));
 
   /* --- scroll entrance --- */
@@ -728,7 +733,7 @@ gsap.registerPlugin(ScrollTrigger);
     tl.to(overlay, { autoAlpha: 1, duration: 0.38, ease: 'power2.inOut' }, 0.24);
 
     /* stagger content in */
-    const els = overlay.querySelectorAll('.sub-tag,.sub-title,.sub-divider,.sub-desc,.sub-back');
+    const els = overlay.querySelectorAll('.sub-tag,.sub-title,.sub-divider,.sub-desc,.sub-actions');
     tl.to(els, { autoAlpha: 1, y: 0, stagger: 0.09, duration: 0.48, ease: 'power2.out' }, 0.56);
   }
 
@@ -741,7 +746,7 @@ gsap.registerPlugin(ScrollTrigger);
     const overlay = document.getElementById(`overlay${idx}`);
     const item    = document.getElementById(`fork${idx}`);
     const wrap    = item.querySelector('.fork-svg-wrap');
-    const els     = overlay.querySelectorAll('.sub-tag,.sub-title,.sub-divider,.sub-desc,.sub-back');
+    const els     = overlay.querySelectorAll('.sub-tag,.sub-title,.sub-divider,.sub-desc,.sub-actions');
 
     const tl = gsap.timeline({
       onComplete() {

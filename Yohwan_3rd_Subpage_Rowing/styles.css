@@ -3,13 +3,13 @@
    ============================================================ */
 
 :root {
-  /* page background: animated by GSAP from cool → warm red */
+  /* page background: animated by GSAP from deep navy → sky blue */
   --bg-top: #0b1d2a;
   --bg-bottom: #10293a;
 
   --ink: #f2ece2;
   --ink-dim: rgba(242, 236, 226, 0.55);
-  --accent: #e4584b;
+  --accent: #6ec3ef;
 
   --font-display: "Cormorant Garamond", Georgia, serif;
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -31,6 +31,64 @@ body {
   background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
   background-attachment: fixed;
   overflow-x: hidden;
+}
+
+/* ============ TOP SITE NAV ============ */
+
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.85rem 2rem;
+  background: linear-gradient(180deg, rgba(11, 29, 42, 0.92) 0%, rgba(11, 29, 42, 0.72) 70%, transparent 100%);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+.site-nav > * {
+  pointer-events: auto;
+}
+
+.site-nav__brand {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  list-style: none;
+  margin-left: auto;
+}
+
+.site-nav__links a {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  text-decoration: none;
+  padding: 0.45rem 0.7rem;
+  transition: color 0.25s;
+  border-radius: 2px;
+}
+
+.site-nav__links a:hover,
+.site-nav__links a.is-active {
+  color: var(--ink);
+}
+
+.site-nav__links a.is-active {
+  color: var(--accent);
 }
 
 /* ============ HERO / ABOUT ME ============ */
@@ -77,16 +135,18 @@ body {
 .hero-name {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(3rem, 11vw, 7rem);
+  font-size: clamp(3.75rem, 13.75vw, 8.75rem);
   line-height: 1.04;
   letter-spacing: 0.02em;
 }
 
 .hero-sub {
   margin-top: 1.6rem;
-  font-size: clamp(0.85rem, 1.8vw, 1.05rem);
-  font-weight: 300;
-  line-height: 1.8;
+  font-family: var(--font-display);
+  font-size: clamp(1.0625rem, 2.25vw, 1.3125rem);
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
   color: var(--ink-dim);
 }
 
@@ -256,7 +316,9 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 7;
-  width: min(560px, 86vw);
+  width: min(640px, 90vw);
+  max-height: min(58vh, 520px);
+  overflow-y: auto;
   padding: clamp(1.2rem, 3.5vw, 2rem) clamp(1.3rem, 4vw, 2.4rem);
   background: rgba(12, 16, 22, 0.72);
   backdrop-filter: blur(10px);
@@ -290,6 +352,10 @@ body {
   font-weight: 300;
   line-height: 1.75;
   color: rgba(242, 236, 226, 0.85);
+}
+
+.milestone p + p {
+  margin-top: 0.7rem;
 }
 
 .milestone em {
@@ -354,6 +420,15 @@ body {
 /* ============ SMALL SCREENS ============ */
 
 @media (max-width: 600px) {
+  .site-nav {
+    padding: 0.7rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .site-nav__links {
+    overflow-x: auto;
+  }
+
   .marker {
     left: 0.4rem;
     gap: 0.3rem;

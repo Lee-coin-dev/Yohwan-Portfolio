@@ -14,14 +14,22 @@
   <div class="vignette"></div>
   <canvas id="dust-canvas" aria-hidden="true"></canvas>
 
-  <!-- Progress / section indicator -->
-  <nav class="stage-indicator" aria-label="Journey progress">
-    <button class="dot" data-go="0" aria-label="The Laboratory"></button>
-    <button class="dot" data-go="1" aria-label="Preparation Phase"></button>
-    <button class="dot" data-go="2" aria-label="Alchemical Reaction"></button>
-    <button class="dot" data-go="3" aria-label="Transformation"></button>
-    <button class="dot" data-go="4" aria-label="The Gold"></button>
-    <button class="dot" data-go="5" aria-label="The Meaning"></button>
+  <nav class="site-nav" aria-label="Site navigation">
+    <a class="site-nav__brand" href="../Yohwan_Mainpage/Yohwan_Mainpage_TuningForks/index.html">John Kim</a>
+    <ul class="site-nav__links">
+      <li><a href="../Yohwan_Mainpage/Yohwan_Mainpage_TuningForks/index.html">Home</a></li>
+      <li><a href="../Yohwan_1st_Subpage_Violin/index.html">Violin</a></li>
+      <li><a href="#" class="is-active" data-nav="alchemy" aria-current="page">Alchemy</a></li>
+      <li><a href="../Yohwan_3rd_Subpage_Rowing/index.html">Rowing</a></li>
+    </ul>
+    <ul class="site-nav__pathways" aria-label="Alchemy stages">
+      <li><button type="button" data-nav-scene="0">Lab</button></li>
+      <li><button type="button" data-nav-scene="1">Prep</button></li>
+      <li><button type="button" data-nav-scene="2">React</button></li>
+      <li><button type="button" data-nav-scene="3">Mirage</button></li>
+      <li><button type="button" data-nav-scene="4">Gold</button></li>
+      <li><button type="button" data-nav-scene="5">Pioneer</button></li>
+    </ul>
   </nav>
 
   <main id="stage">
@@ -147,7 +155,12 @@
       <div class="flask-rig zoomed" id="flask-rig-3">
         <div class="stove platform">
           <div class="stove-glow hot"></div>
-          <div class="stove-body"></div>
+          <div class="stove-body">
+            <button class="btn heat-btn" id="btn-heat">
+              <span class="heat-led"></span>
+              HEAT TO 450°C
+            </button>
+          </div>
         </div>
         <svg class="flask big" viewBox="0 0 200 280" aria-hidden="true">
           <path class="flask-glass" d="M82 18 h36 v74 l44 120 a48 48 0 0 1 -44 66 h-36 a48 48 0 0 1 -44 -66 l44 -120 z"/>
@@ -169,12 +182,6 @@
           <div class="thermo-fill"></div>
           <span class="thermo-read">25°C</span>
         </div>
-
-        <!-- heating button emerging from stove -->
-        <button class="btn heat-btn" id="btn-heat">
-          <span class="heat-led"></span>
-          HEAT TO 450°C
-        </button>
       </div>
       <p class="hint hint-3">Press the brass control to begin heating</p>
     </section>
@@ -187,21 +194,41 @@
         <div class="vortex-core"></div>
       </div>
 
-      <article class="info-bubble" id="info-4">
-        <span class="info-kicker">Humanities Research</span>
+      <article class="info-bubble mirage" id="info-4">
+        <span class="info-kicker">Concord Review · Humanities Research</span>
         <h2>The Mirage of the Middle East</h2>
-        <p>
-          A <strong>Concord Review</strong> research paper exploring the tension between
-          <em>perception and reality</em> — unraveling the hidden narratives and overlooked
-          perspectives that shape how a region is understood.
+        <p class="mirage-lead">
+          The purple haze is a visual representation of my Concord Review paper —
+          how the colloquial term <em>“Middle East”</em> and the meaning of
+          <strong>Orientalism</strong> have shifted across human history.
         </p>
-        <ul class="tag-row">
-          <li>Humanities research</li>
-          <li>Scientific inquiry</li>
-          <li>Cultural exploration</li>
-          <li>Intellectual curiosity</li>
+        <p>
+          Through three case studies — from the Greco-Persian Era (500 BCE), to the
+          Ilkhanate Era (13th century), to the modern tourism industry advertised by
+          the Gulf States — the paper traces how perception and reality diverge,
+          and how those mirages are remade over time.
+        </p>
+        <p>
+          This research grew from something that once seemed trivial: my time in Dubai,
+          often spent fondling with clay. That tactile curiosity became a bridge into
+          Chemistry — resembling the mechanism of Alchemy itself — while heritage sites
+          and museums I visited, even without fully noting every historic detail,
+          unconsciously shaped the direction of this inquiry into Orientalism.
+        </p>
+        <ul class="tag-row mirage-eras" aria-label="Case studies">
+          <li>Greco-Persian · 500 BCE</li>
+          <li>Ilkhanate · 13th c.</li>
+          <li>Modern Gulf tourism</li>
         </ul>
-        <button class="btn brass" id="btn-final-product">See the Final Product</button>
+        <div class="mirage-actions">
+          <a
+            class="btn brass"
+            id="btn-download-paper"
+            href="Papers/John%20Yohwan%20Kim_Mirage_of_The%20_Middle_East.docx.pdf"
+            download="The_Mirage_of_the_Middle_East.pdf"
+          >Download</a>
+          <button class="btn mirage-continue" id="btn-final-product" type="button">Continue the reaction</button>
+        </div>
       </article>
     </section>
 
@@ -242,22 +269,47 @@
 
     <!-- ===================== SECTION 6 — THE MEANING ===================== -->
     <section class="scene" id="scene-6" data-scene="5">
-      <article class="info-bubble wide" id="info-6">
+      <article class="info-bubble gold-meaning" id="info-6">
         <span class="info-kicker">The Meaning of the Gold</span>
-        <h2 class="gold-text">"The gold represents the discovery of my passion for chemistry."</h2>
-
-        <div class="meaning-grid">
-          <div class="meaning-card">
-            <h3>Pioneer Academics Research</h3>
-            <p>Blood chemistry research — scientific investigation paired with rigorous analytical thinking.</p>
-          </div>
-          <div class="meaning-card">
-            <h3>Identity Connection</h3>
-            <p>Chemistry ties together my curiosity, love of discovery, pattern recognition, and fascination with unseen processes.</p>
-          </div>
+        <h2 class="gold-text">Gold symbolizes discovering my interest in Chemistry.</h2>
+        <p class="gold-lead">
+          Gold is the visual representation of how seemingly useless clay inspired my main passion —
+          my life-driven force. What began as a trivial material became the spark that led me into
+          Chemistry, and <strong>Pioneer Academics Research</strong> is the physical product of that
+          genuine commitment to the field.
+        </p>
+        <p>
+          The review asks: How can the molecular characteristics of circulating tumor DNA
+          (<em>ctDNA</em>) biomarkers inform the rational design of biosensing technologies for
+          early cancer detection?
+        </p>
+        <div class="thesis-block">
+          <span class="thesis-label">Thesis</span>
+          <p>
+            Current ctDNA research has largely emphasized discovering new biomarkers and improving
+            sensing technologies independently. However, the rational design of next-generation
+            biosensors should begin with the molecular chemistry of the biomarker itself, because
+            biomarker properties fundamentally determine the requirements for molecular recognition
+            and analytical detection.
+          </p>
         </div>
-
-        <button class="btn brass" id="btn-restart">Back to the Alchemy Experiment</button>
+        <ul class="tag-row gold-tags" aria-label="Research focus">
+          <li>Pioneer Academics</li>
+          <li>ctDNA biomarkers</li>
+          <li>Biosensor design</li>
+          <li>Early cancer detection</li>
+        </ul>
+        <div class="mirage-actions gold-actions">
+          <button
+            class="btn brass"
+            id="btn-download-pioneer"
+            type="button"
+            disabled
+            title="Paper coming soon"
+            aria-disabled="true"
+          >Download</button>
+          <button class="btn mirage-continue" id="btn-restart" type="button">Back to the Alchemy Experiment</button>
+        </div>
       </article>
     </section>
 

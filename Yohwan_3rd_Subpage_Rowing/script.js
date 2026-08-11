@@ -32,7 +32,7 @@ mm.add(
     }
 
     /* ---------- Hero: fade out as the race begins ---------- */
-    gsap.to(".hero-text, .hero-badge, .hero-scroll-hint", {
+    gsap.to(".hero-text", {
       autoAlpha: 0,
       y: -60,
       ease: "none",
@@ -174,12 +174,11 @@ mm.add(
       });
     });
 
-    /* ---------- Background warmth: cool water → red heat ----------
-       The harder the race gets, the warmer it burns — an exothermic
-       finish. Animated via CSS variables on :root. */
+    /* ---------- Background: deep navy → open sky blue ----------
+       As the race progresses, the water opens into brighter sky. */
     gsap.to("html", {
-      "--bg-top": "#43111a",
-      "--bg-bottom": "#7c2020",
+      "--bg-top": "#123a58",
+      "--bg-bottom": "#6eb8e8",
       ease: "none",
       scrollTrigger: {
         trigger: "#race",
